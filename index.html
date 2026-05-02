@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Anthropic Product Manager, Consumer — Strategic Brief · Kelvin Zee</title>
+<meta name="description" content="A measured strategy brief for Anthropic's Product Manager, Consumer role, focused on Claude as a path from idea to customer-built tools." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          anthro: {
+            background:'#faf9f5', surface:'#f4f2ea', primary:'#141413', body:'#3d3a34', muted:'#6f6a60', accent:'#d97757', warning:'#a65f21', border:'#d8d3c7'
+          }
+        },
+        fontFamily: {
+          display: ['Poppins', 'Arial', 'sans-serif'],
+          body: ['Lora', 'Georgia', 'serif'],
+          mono: ['Geist Mono', 'ui-monospace', 'monospace']
+        }
+      }
+    }
+  };
+</script>
+<style>
+  * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  html { scroll-behavior: smooth; }
+  body { background:#faf9f5; color:#141413; font-family:'Lora', Georgia, serif; }
+  .font-display { font-family:'Poppins', Arial, sans-serif; letter-spacing:-0.025em; }
+  .font-body { font-family:'Lora', Georgia, serif; }
+  .font-mono { font-family:'Geist Mono', ui-monospace, monospace; font-feature-settings:'zero' on; }
+  .hero-gradient { background: radial-gradient(circle at 20% 10%, rgba(217,119,87,0.13), transparent 35%), linear-gradient(180deg,#faf9f5 0%,#f4f2ea 100%); }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes pulseSoft { 0%,100% { opacity:.55; } 50% { opacity:1; } }
+  .anim-fade-up { animation:fadeUp .65s cubic-bezier(.2,.8,.2,1) both; }
+  .anim-pulse-soft { animation:pulseSoft 2.4s ease-in-out 2; }
+  .num-display { font-feature-settings:'tnum' on,'lnum' on; font-variant-numeric:tabular-nums lining-nums; }
+  .hairline { height:1px; background:#d8d3c7; }
+  .mobile-scroll-cue { display:none; }
+  @media (max-width: 767px) { .mobile-scroll-cue { display:flex; } }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior:auto; }
+    *, *::before, *::after { animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
+  }
+  @media print {
+    @page { margin: 0.65in; }
+    html { scroll-behavior:auto; }
+    body { background:#fffdf8 !important; color:#141413 !important; }
+    * { animation:none !important; transition:none !important; box-shadow:none !important; }
+    section, footer { padding: 32px 0 !important; border-color:#d8d3c7 !important; }
+    .hero-gradient { background:#fffdf8 !important; }
+    .print-card, .print-avoid, h1, h2, h3 { break-inside:avoid; page-break-inside:avoid; }
+    .print-card { background:#fffdf8 !important; border-color:#d8d3c7 !important; }
+    .mobile-scroll-cue { display:none !important; }
+    svg { max-width:100% !important; min-width:0 !important; }
+    a { color:#141413 !important; text-decoration:none !important; }
+  }
+</style>
+</head>
+<body>
+<div id="root">
+  <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#faf9f5;color:#141413;font-family:'Geist Mono',ui-monospace,monospace;">
+    <div style="border:1px solid #d8d3c7;background:#f4f2ea;padding:24px 28px;max-width:420px;margin:24px;text-align:left;">
+      <div style="font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:#d97757;margin-bottom:12px;">Anthropic brief</div>
+      <div style="font-family:'Poppins',Arial,sans-serif;font-size:18px;line-height:1.35;color:#141413;margin-bottom:10px;">Preparing the interactive strategy memo</div>
+      <div style="font-size:12px;line-height:1.6;color:#6f6a60;">Loading React and compiling the brief in-browser. This page has no build step or backend.</div>
+    </div>
+  </div>
+</div>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script type="text/babel" data-presets="react">
+const { useState, useMemo } = React;
+
+const I = ({ children, size=16, className='', stroke=2 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={stroke} strokeLinecap="round" strokeLinejoin="round" className={className}>{children}</svg>
+);
+const Check = (p) => <I {...p}><polyline points="20 6 9 17 4 12"/></I>;
+const X = (p) => <I {...p}><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></I>;
+const ArrowDown = (p) => <I {...p}><line x1="12" x2="12" y1="5" y2="19"/><polyline points="19 12 12 19 5 12"/></I>;
+
+const HERO_STATS = [
+  { num:'$30B+', label:'Claude run-rate revenue', sub:'Anthropic, Apr 2026' },
+  { num:'$380B', label:'post-money valuation', sub:'Series G, Feb 2026' },
+  { num:'1,000+', label:'$1M+ annualized customers', sub:'Anthropic, Apr 2026' },
+  { num:'5GW', label:'new compute capacity', sub:'Amazon agreement, Apr 2026' }
+];
+
+const SETUP_CARDS = [
+  { tag:'The Spend', head:'The spend shift requires more than generating a tool; it requires replacing enough of the SaaS operating bundle.', body:'Customers pay monthly, annually, or per seat because SaaS vendors bundle workflow logic, hosting, auth, permissions, integrations, support, and uptime into one contract. Anthropic reported Claude run-rate revenue above $30B in April 2026, up from about $9B at the end of 2025, and customers spending more than $1M annualized moved from 500+ in February to 1,000+ by April. That scale makes the next consumer question more direct: which workflows can move from rented seats into a Claude-centered build-and-run subscription?', stat:'$30B+ run-rate revenue; 1,000+ $1M annualized customers, Anthropic, Apr 2026' },
+  { tag:'The Stack', head:'Claude already has the build side of the stack, but the run side is where the product strategy gets harder.', body:'Claude Code gives Anthropic credibility in agentic software creation: reading codebases, editing files, running tests, and delivering committed code. Claude Design extends the front of the funnel by helping users create prototypes, slides, one-pagers, and visual work before handing the idea to a build surface. The missing product question is whether Anthropic owns, bundles, or partners for the runtime layer: database, auth, storage, hosting, observability, rollback, and support.', stat:'Claude Code plus Claude Design: prototype and build surfaces, Anthropic, 2026' },
+  { tag:'The Boundary', head:'A build-and-run subscription only works if reliability, governance, and cost are part of the product promise.', body:'Anthropic says Claude will remain ad-free, which gives the company a trust position for sensitive work and customer-specific tools. At the same time, Anthropic has announced more than $100B in Amazon compute commitments over ten years and up to 5GW of new capacity to train and run Claude. If Claude becomes the place customers build and run software, the product has to make data access, permissions, hosting boundaries, usage limits, rollback, ownership, and support paths visible before the tool becomes load-bearing.', stat:'Ad-free stance; $100B+ Amazon compute commitment; up to 5GW capacity, Anthropic, 2026' }
+];
+
+const ANALOGY_PHASES = [
+  {
+    label:'Metered service',
+    detail:'Wireless customers used to buy service through a stack of minutes, messages, data buckets, subsidies, contracts, fees, and overage risk. The carrier packaged access, but customers still had to manage anxiety around normal use.',
+    read:'SaaS vendors package a similar operating bundle for workflows: product surface, business logic, hosting, auth, permissions, integrations, billing, support, and uptime. The build-and-run question is whether Claude can make enough of that bundle understandable and purchasable in one place.'
+  },
+  {
+    label:'Productized rights',
+    detail:'T-Mobile JUMP! turned a messy device-upgrade process into a paid right with explicit rules around timing, trade-in, protection, and monthly cost.',
+    read:'A Claude build-and-run subscription would need an equivalent rights model: who can create the tool, deploy it, share it, connect data, approve changes, roll back versions, and receive support when it fails.'
+  },
+  {
+    label:'Usage confidence',
+    detail:'Music Freedom and Binge On reduced fear around normal media use, but they also introduced partner, policy, and explanation complexity.',
+    read:'For customer-specific software, the analogous anxiety is not media data. It is runtime usage, model calls, connector scope, hosting cost, permission risk, and whether a generated workflow keeps working after the first demo.'
+  },
+  {
+    label:'Inflection point',
+    detail:'T-Mobile ONE moved the customer promise toward unlimited usage, tax-inclusive pricing, and a more predictable monthly bill.',
+    read:'For Claude, the equivalent is not unlimited AI. It is a predictable subscription path from workflow description to prototype to deployed tool to governed operation, with clear boundaries around reliability, data access, cost, and support.',
+    pivot:true
+  },
+  {
+    label:'Recognized bundle',
+    detail:'Netflix On Us made plan value easier to explain because customers recognized the benefit and could attach it to a household job.',
+    read:'Claude’s build-and-run benefit would need the same clarity. The customer should know whether they are paying for prototype help, a hosted tool, an agent runtime, governance controls, or a supportable replacement for a rented workflow.'
+  },
+  {
+    label:'Operating surface',
+    detail:'Billing & Benefits became the surface where customers checked value, paid, set up recurring payment, understood add-ons, and resolved confusion.',
+    read:'Customer-built software needs its own post-launch surface: versions, permissions, data connections, usage, failures, rollback, support, telemetry, and a clear owner when the tool becomes load-bearing.'
+  }
+];
+
+const FIELD_ROWS = [
+  [`Claude / Anthropic`, `Claude Code, Claude Design, artifacts, projects, memory, connectors, API, MCP-style tool connections, and agent tooling.`, `Strong in intent, reasoning, artifact generation, code generation, and agentic build work. The open layer is whether Claude should own, bundle, or partner for database, auth, storage, hosting, monitoring, rollback, and support.`, `Anthropic's field position is strongest if Claude becomes the trusted front door for building customer-specific software and the control surface for deciding what should be hosted, governed, and supported.`],
+  [`Replit / Bolt / Lovable / v0`, `Natural-language app builders, hosted previews, design-to-code workflows, deployment flows, and increasingly full-stack generation.`, `Strong in idea-to-running-app conversion. Replit emphasizes natural-language app creation and deployment; Lovable describes full-stack web apps from natural language; v0 and Bolt compress front-end and app scaffolding.`, `These products are the closest visible proof that customers expect AI to create software, not only answer questions. Claude's opportunity is to compete one level higher: product judgment, reliability boundaries, and the build-and-run subscription layer.`],
+  [`Cursor / developer agents`, `IDE, terminal, repository, and agent surfaces where developers delegate code changes, refactors, debugging, tests, and multi-step implementation.`, `Strong in professional developer workflow. They show that agents can work inside real codebases, but also that production access requires review, tests, rollback, and ownership.`, `Claude Code gives Anthropic credibility with builders. The consumer question is how much of that power can move toward PMs, operators, founders, and domain experts without hiding the need for review and recovery.`],
+  [`Supabase / Vercel / infrastructure platforms`, `Database, auth, storage, functions, hosting, deployment, previews, observability, environments, and scaling primitives.`, `Strong in the run layer. They package the parts generated apps need after the demo: data persistence, identity, hosting, APIs, deployment, rollback, and cost visibility.`, `This is the likely partner-or-own decision. If Anthropic wants a build-and-run subscription, it needs a runtime answer that feels as simple as the model surface.`],
+  [`Figma / design-to-product surfaces`, `Design canvases, prototypes, AI-generated interfaces, product artifacts, handoff flows, and increasingly app-like prototypes.`, `Strong in the pre-code surface where ideas become visible and collaborative. Figma Make and similar tools teach users that product intent can start as a visual prototype connected to data and behavior.`, `Claude Design can move Anthropic into this surface, but the more durable question is handoff: can the prototype become a hosted, governed, maintainable tool without losing the customer's intent?`],
+  [`Microsoft / Google`, `Office, Workspace, email, meetings, spreadsheets, storage, identity, accounts, admin controls, and enterprise distribution.`, `Strong in embedded context and account-level distribution. They do not need users to adopt a new destination for many workflows because the work already lives inside their suites.`, `Anthropic should assume some workflows are better won through embedded or connected distribution. A build-and-run subscription has to connect to where work already lives, not ask every user to start from a blank Claude surface.`],
+  [`Vertical SaaS incumbents`, `Packaged workflows with data models, admin controls, integrations, procurement paths, uptime expectations, support teams, and compliance language.`, `Strong in the operating contract. Buyers pay because the vendor takes responsibility for a workflow, not because the UI was hard to build.`, `These are the spend pools Claude may pressure, but only workflow by workflow. The first movement is likely custom tools around narrow workflows, not replacement of mature systems of record.`]
+];
+
+const FIELD_READS = [
+  [`The field is shifting from generate to operate`, `Several products can now turn natural language into screens, code, or hosted prototypes. The harder question is who owns the tool after it works once: data, identity, hosting, permissions, monitoring, support, rollback, and cost.`],
+  [`The stack is fragmenting into build and run layers`, `Claude, Replit, Lovable, Bolt, v0, Cursor, Figma, Supabase, and Vercel each own different handoffs. A build-and-run subscription would need to make those handoffs feel like one product without pretending one interface should own every layer immediately.`],
+  [`The real competitor is the SaaS operating bundle`, `Vertical SaaS vendors package workflow logic, data models, admin rights, support, reliability, and procurement comfort. Claude can pressure that spend only where the generated tool comes with an understandable operating boundary.`]
+];
+
+const FIELD_NOT_CLAIM = [
+  `I would not claim Claude should copy AI app builders. The stronger opportunity is frontier reasoning plus a clearer build, deploy, run, and govern path.`,
+  `I would not claim Anthropic has to own the entire runtime layer on day one. A Supabase, Vercel, Replit, or cloud-style partnership could be the right first mechanism.`,
+  `I would not claim generated tools replace mature SaaS systems quickly. Systems of record, regulated workflows, and procurement-heavy platforms have switching costs that a demo cannot erase.`,
+  `I would not claim nontechnical builders need zero operating judgment. The product can lower the build barrier, but ownership, permissions, rollback, and support still matter.`
+];
+
+const USER_SHIFT_ROWS = [
+  { shift:'From app user to workflow specifier', old:'“Which SaaS tool is closest to what I need?”', next:'“Can I describe the exact workflow and have Claude turn it into software I can use?”', legible:'The workflow steps, roles, data sources, approvals, success conditions, and where human review is still required.' },
+  { shift:'From one-off build to build-and-run bundle', old:'“The AI generated a useful prototype.”', next:'“Can the tool be hosted, updated, governed, and available on the devices my team or customers use?”', legible:'Hosting, auth, data persistence, device access, monitoring, versioning, rollback, and the support path after first use.' },
+  { shift:'From SaaS seat to runtime subscription', old:'“We pay monthly, annually, or per seat for the vendor’s product.”', next:'“Some spend may move toward Claude usage, hosted tools, agents, connectors, and runtime support.”', legible:'Which dollars are addressable, which operating costs Anthropic would absorb or partner for, and where SaaS still remains the system of record.' },
+  { shift:'From vendor-owned workflow to customer-owned tool', old:'“The vendor decides the roadmap and we adapt our process.”', next:'“The customer can shape the tool around its own process, data, edge cases, and operating cadence.”', legible:'Who owns the tool, who can change it, who approves updates, and what happens when the workflow changes.' },
+  { shift:'From internal automation to customer-facing software', old:'“Generated tools are safe only for internal experiments.”', next:'“Some tools may become customer-facing if identity, reliability, permissions, and support are clear enough.”', legible:'External-user access, uptime expectations, data boundaries, audit trail, failure handling, and brand risk.' },
+  { shift:'From software delivery to software operation', old:'“Shipping the first version is the milestone.”', next:'“The product has to keep working, improve safely, and explain what changed.”', legible:'Usage telemetry, support signals, cost exposure, generated changes, approval flows, and retirement paths for tools that should not continue.' }
+];
+
+const USER_SHIFT_NOT_CLAIM = [
+  'I would not claim every user wants to become a software builder. The better product promise is that a user can describe the workflow and understand the operating boundary.',
+  'I would not claim SaaS vendors are only middlemen. They hide hosting, auth, uptime, permissions, procurement, support, and compliance work that Claude would need to own, bundle, or partner for.',
+  'I would not claim every generated tool should be Anthropic-hosted. Some workflows may stay customer-managed, partner-hosted, or limited to prototypes.',
+  'I would not claim broad SaaS categories get replaced quickly. The defensible starting point is workflow-level movement where custom fit and speed outweigh packaged breadth.'
+];
+
+const SEGMENTS = [
+  {
+    segment: 'Individual builder',
+    customer: 'A person with a repeated workflow that is too specific for packaged software: planning, tracking, research, writing, household operations, investing, job search, or personal admin.',
+    buildJob: 'Turn a plain-language workflow into a small tool that works across devices, saves state, and can be changed without learning a developer stack.',
+    spendShift: 'Light spend movement: fewer niche apps, spreadsheets, or one-off subscriptions; more value attached to Claude as the personal build-and-run surface.',
+    boundary: 'Needs low setup, clear data scope, recovery from mistakes, and an honest label when the output is a prototype rather than a dependable tool.',
+    metric: 'Repeat tool use, saved workflow rate, cross-device return, manual workaround reduction.'
+  },
+  {
+    segment: 'PM or operator builder',
+    customer: 'A product manager, marketer, analyst, chief of staff, or operations lead who understands the process but does not own engineering capacity.',
+    buildJob: 'Create a working internal tool for intake, prioritization, reporting, customer follow-up, content operations, approval routing, or lightweight CRM.',
+    spendShift: 'Potential movement from point SaaS, no-code tools, spreadsheets, and internal ticket queues toward a Claude subscription that includes build, iteration, and hosted operation.',
+    boundary: 'Needs artifact-to-code handoff, stakeholder sharing, version control, permissioning, runtime ownership, and a clean escalation path when the tool breaks.',
+    metric: 'Time-to-first-working-tool, stakeholder reuse, workflow completion, owner confidence after week two.'
+  },
+  {
+    segment: 'Small business owner',
+    customer: 'A business owner or small team that buys SaaS because custom software has historically required developers, hosting, integrations, and ongoing support.',
+    buildJob: 'Build and run narrow customer-facing or back-office tools: quote generators, appointment intake, inventory trackers, service portals, customer follow-up flows, or reporting dashboards.',
+    spendShift: 'Direct spend movement is plausible if the build-and-run bundle replaces one or two monthly SaaS subscriptions and gives the owner enough support confidence to rely on it.',
+    boundary: 'Needs one clear price, simple deployment, auth, data persistence, uptime expectations, rollback, and a support path that does not assume the owner can debug infrastructure.',
+    metric: 'Replacement intent, paid runtime conversion, successful customer-facing sessions, support contacts per active tool.'
+  },
+  {
+    segment: 'Midsize team',
+    customer: 'A department with repeated process pain and budget authority, but limited platform-team access and more governance expectations than a small business.',
+    buildJob: 'Create team tools around approvals, CRM hygiene, support triage, finance operations, hiring, customer success, reporting, or partner operations.',
+    spendShift: 'Movement from per-seat SaaS expansion becomes plausible when a custom tool handles the narrow workflow better than a broad platform and can be run with admin visibility.',
+    boundary: 'Needs role-based access, observability, integration support, shared ownership, versioning, and a decision on whether Anthropic, a partner, or the customer owns the runtime.',
+    metric: 'Team adoption, admin setup completion, cost per successful run, integration failure rate, support escalation rate.'
+  },
+  {
+    segment: 'Enterprise function',
+    customer: 'A function inside a larger company that wants role-specific software but has procurement, security, compliance, data-retention, and support constraints.',
+    buildJob: 'Prototype and operate governed tools for legal, HR, sales, finance, support, operations, or customer success before deciding whether to buy, build, standardize, or retire the workflow.',
+    spendShift: 'Spend may move from long-tail SaaS and services work into Claude only if the package includes admin controls, auditability, vendor-risk fit, and a credible support model.',
+    boundary: 'Needs compliance review, data retention, access controls, audit logs, procurement fit, deployment controls, and a production-readiness path before expansion.',
+    metric: 'Pilot retention, compliance approval, support deflection, expansion requests, production-readiness progression.'
+  },
+  {
+    segment: 'Customer-facing business',
+    customer: 'A company that wants external customers to use a generated portal, intake flow, approval surface, estimator, status tracker, or self-service workflow.',
+    buildJob: 'Move from an internal prototype to a customer-facing product surface that works reliably on the devices customers already use.',
+    spendShift: 'Highest potential spend movement if the tool replaces a portal, form platform, support workflow, or vertical SaaS module; also the highest cost if reliability or support fails.',
+    boundary: 'Needs identity, permissions, uptime, customer support, observability, rollback, brand-risk controls, and a clear owner for incidents and changes.',
+    metric: 'External activation, completion rate, incident rate, rollback events, customer support contacts, renewal or replacement intent.'
+  },
+  {
+    segment: 'Developer, agency, or SaaS incumbent',
+    customer: 'A technical builder, services firm, or SaaS company using Claude to create custom extensions, integrations, migrations, or customer-specific tools faster.',
+    buildJob: 'Use Claude Code, APIs, MCP, and deployment partners to convert messy customer intent into tested software and safer production handoff.',
+    spendShift: 'This may not displace SaaS directly. It can become the enabling layer that lets incumbents defend their economics or agencies build customer-specific software with better margins.',
+    boundary: 'Needs code quality, tests, deployment reliability, cost management, generated-change review, customer data controls, and maintainability after the first build.',
+    metric: 'Merged work, test pass rate, deployment frequency, services hours reduced, configuration cycle time, rollback events.'
+  }
+];
+
+const SEGMENT_NOT_CLAIM = [
+  'I would not treat consumer as one segment. A single-user builder, small business owner, customer-facing team, and enterprise function may all want customer-specific software, but their runtime and governance thresholds are different.',
+  'I would not claim every segment wants to become a developer. The product opportunity is to let domain experts specify, test, and operate tools while engineering judgment remains available where risk increases.',
+  'I would not claim every SaaS dollar is addressable. Systems of record, regulated workflows, mature collaboration suites, and procurement-heavy platforms bundle operating value that a generated tool may not replace.',
+  'I would not assume build success equals run success. The sharper test is whether the tool stays useful after hosting, auth, permissions, support, rollback, cost, and ownership become visible.'
+];
+
+const HYPOTHESES = [
+  {
+    id:'A',
+    title:'Claude’s strongest consumer wedge may be the build-and-run layer for customer-specific software, not another app builder.',
+    summary:'The more specific consumer bet is that a user can describe a repeated workflow and have Claude help turn it into software that can be designed, built, hosted, governed, and improved. That is different from generating code once because the customer is paying for the operating bundle, not only the artifact.',
+    why:'Claude Code, Claude Design, artifacts, projects, connectors, MCP, code execution, and agent tooling already point toward an idea-to-tool path. If Claude can package the runtime layer with partners or first-party infrastructure, some spend now captured by SaaS vendors could move into Claude subscriptions, usage, hosted tools, or managed agents.',
+    risk:'The build layer may be easier to productize than the run layer. SaaS vendors earn spend because they handle auth, database, permissions, integrations, uptime, admin controls, support, compliance, and shared workflow conventions. A Claude-built tool can look strong in a demo and still fail when multiple users, external customers, or regulated data depend on it.',
+    validate:'Compare repeated workflow descriptions, prototype-to-deploy rate, hosted-tool activation, safe-share behavior, partner runtime usage, support contacts, and willingness to redirect budget from a rented SaaS workflow. The signal I would trust is repeated operation with clear ownership, not first-build excitement.',
+    confidence:'High as the central product thesis, medium as a near-term roadmap filter, low as a claim that Anthropic should own every runtime layer first-party.',
+    confidenceTone:'amber'
+  },
+  {
+    id:'B',
+    title:'The spend shift could start with narrow workflows where custom fit matters more than SaaS completeness.',
+    summary:'The first addressable jobs are likely specific, high-friction workflows close to the customer’s context: intake, reporting, approvals, lightweight CRM, dashboards, scheduling, research, and internal operations. A narrower generated tool can beat a broader subscription when the customer values fit, speed, ownership, and lower coordination cost.',
+    why:'SaaS standardizes one workflow for many customers. LLM-assisted building lets one customer, team, or function specify its own version, test it quickly, connect the data it already uses, and keep only the parts that matter. This is where a single user, small business, midsize team, or enterprise function may share the same desire even if their governance thresholds differ.',
+    risk:'Narrow tools can sprawl. A customer may replace one SaaS bill with fragile custom workflows, duplicated data, unclear support ownership, security gaps, and hidden maintenance cost. The willingness to build does not automatically become willingness to run.',
+    validate:'Run workflow-level fake doors and concierge tests across customer sizes. Track custom-tool reuse, hosted-tool activation, share rate, maintenance events, cost per successful run, and stated SaaS replacement intent after the second or third use.',
+    confidence:'High for narrow workflow unbundling, medium for team-level build-and-run tools, low for replacing systems of record without internal validation.',
+    confidenceTone:'amber'
+  },
+  {
+    id:'C',
+    title:'The highest-confidence start is making the build-to-run boundary visible before changing packaging, pricing, or navigation.',
+    summary:'This is the least risky place to start because it improves the existing Claude Code, Claude Design, artifact, and connector path without declaring a new subscription architecture. The product work is to show what must be true before a prototype can become a hosted or shared tool.',
+    why:'A user can be excited by a working prototype and still not know whether it is safe to deploy, share, connect to data, or rely on across devices. Readiness checks, test status, permission explanations, hosting choices, rollback paths, ownership prompts, and usage-cost cues can improve trust and instrumentation without forcing Anthropic to own the full runtime on day one.',
+    risk:'Too much scaffolding can slow down the creative loop and make Claude feel like an enterprise release process. The right mechanism is contextual disclosure: show the boundary when the user tries to connect data, invite another user, deploy the tool, or depend on it repeatedly.',
+    validate:'Test build-to-run readiness cues, deployment preflight checks, permission explanations, partner-hosting handoffs, rollback paths, ownership prompts, and usage pre-warnings with builder cohorts. Measure tool completion, hosted activation, safe-share rate, deployment abandonment, rollback events, support contacts, and repeat operation.',
+    confidence:'High as a near-term UX and instrumentation move, medium as a retention lever, low as a complete build-and-run strategy.',
+    confidenceTone:'emerald',
+    isStartingPoint:true
+  },
+  {
+    id:'D',
+    title:'Claude could eventually become a build-and-run subscription layer, but that structural bet should be earned by data rather than assumed.',
+    summary:'The bold move would be to package workflow capture, design, code generation, backend, hosting, governance, monitoring, repair, and support into one customer-facing subscription. That could make the SaaS-spend thesis visible to customers, but it is premature without evidence that users can operate these tools safely and repeatedly.',
+    why:'The ingredients are forming across Claude Code, Claude Design, artifacts, projects, connectors, MCP, API, memory, and agent tooling. If specific workflows repeatedly shift from rented software to Claude-built and Claude-run tools, the product architecture could make those loops explicit and monetize build, runtime, governance, and improvement as one bundle.',
+    risk:'A build-and-run subscription could pull Anthropic into obligations that look more like a platform, cloud provider, and SaaS vendor at the same time: uptime, hosting, auth, database, debugging, permissions, billing, compliance, customer support, and failure recovery. It could also require partnerships or acquisitions before the product promise is defensible.',
+    validate:'Use behavioral clustering, job-based fake doors, partner-hosted betas, and cohort analysis before changing navigation, packaging, or plan structure. Require evidence across repeat use, hosted operation, trust comprehension, marginal cost, support burden, upgrade intent, and actual SaaS-spend displacement.',
+    confidence:'Medium as a long-term architecture hypothesis, low as a near-term commitment, highest only after internal telemetry and partner-runtime tests support it.',
+    confidenceTone:'amber'
+  }
+];
+
+const FRONTIER_BETS = [
+  { name:'Customer tool composer', desc:'Turn a described workflow into a small customer-facing tool with a form, logic, output, and review path.' },
+  { name:'SaaS replacement scout', desc:'Help a user identify which rented workflow could become a narrower custom tool and what risks still need a packaged product.' },
+  { name:'Prototype-to-deploy rail', desc:'Move from Claude Design or artifact to Claude Code, then to a constrained deployment checklist with tests and rollback.' },
+  { name:'Context ledger', desc:'Show what data, files, connectors, memories, and tool calls a generated workflow uses.' },
+  { name:'Approval-based task runner', desc:'Let Claude perform bounded workflow steps only after preview, approval, and recovery paths are visible.' }
+];
+
+const CAREER_ARCS = [
+  { era:'Aug 2012 – Jan 2017', company:'T-Mobile', role:'Senior Product Manager, Device Programs / Postpaid Subscription Product', relevance:'This is the analogous transition from complex product mechanics into a consumer promise people could understand and repeat.', wins:['JUMP!, device financing, insurance, and mobile security work associated with ~60% JUMP! attach rate.','T-Mobile ONE moved plan architecture toward tax-inclusive, unlimited, upgrade-friendly postpaid subscriptions.','Value bundle work across Netflix, international roaming, and inflight Wi-Fi associated with postpaid base growth from 56.8M to 75.6M.'], tieIn:'The Anthropic parallel is not telecom pricing. It is turning complex capability, rules, and value into a product surface customers can trust.' },
+  { era:'Jan 2017 – Mar 2022', company:'T-Mobile', role:'Senior Manager, Customer Engagement Product Management', relevance:'This is the analogous transition from launch mechanics into the operating system that makes a consumer product reliable at scale.', wins:['Billing & Benefits became T-Mobile’s #1 digital property by engagement across web, app, and paper bill.','+204% YoY one-time payment completion; +76% recurring payment setup.','+23% CLV in the first 12 months; Mintel Best Wireless Billing 2019 and highest ACSI score in wireless.'], tieIn:'The Anthropic parallel is that consumer AI trust will show up in the operating surface: usage visibility, support signals, recovery paths, and repeat behavior.' },
+  { era:'Apr 2022 – Sep 2023', company:'Amazon Prime', role:'Senior Manager, Prime Worldwide Engagement', relevance:'This is the analogous transition from many disconnected benefits into a measurable lifecycle system for habit, renewal, and cross-surface engagement.', wins:['Built a PM team from 1 to 5 Senior PMTs and influenced 26 country-level PM teams through a hub-and-spoke model.','Global engagement platform scaled to 30M+ monthly benefit utilizations and >1B monthly impressions.','Operating cadence associated with +23% renewals and +17% shopping activity at peak.'], tieIn:'The Anthropic parallel is making Claude’s expanding capabilities coherent enough that users return for specific jobs, not just impressive answers.' }
+];
+
+const Eyebrow = ({ children, className='' }) => <div className={`font-mono text-[10px] tracking-[0.2em] uppercase text-anthro-muted ${className}`}>{children}</div>;
+const SectionHeader = ({ num, label, title, lead }) => (
+  <div className="mb-12">
+    <div className="flex items-baseline gap-4 mb-6"><span className="font-mono text-xs text-anthro-muted tabular-nums">§ {num}</span><Eyebrow>{label}</Eyebrow></div>
+    <h2 className="font-display text-3xl md:text-5xl text-anthro-primary leading-[1.08] mb-6 max-w-4xl">{title}</h2>
+    {lead && <p className="font-body text-lg md:text-xl text-anthro-body leading-relaxed max-w-3xl">{lead}</p>}
+  </div>
+);
+const PullQuote = ({ children }) => <div className="my-8 pl-6 border-l-2 border-anthro-accent"><p className="font-body italic text-2xl text-anthro-primary leading-snug">{children}</p></div>;
+const MetricMeter = ({ label, value, lowGood=false }) => (
+  <div>
+    <div className="flex justify-between gap-4 mb-2"><span className="font-mono text-[10px] uppercase tracking-[0.18em] text-anthro-muted">{label}</span><span className="font-mono text-xs text-anthro-primary num-display">{value}</span></div>
+    <div className="h-2 bg-anthro-border rounded-full overflow-hidden"><div className={`h-full ${lowGood ? 'bg-anthro-warning' : 'bg-anthro-accent'} rounded-full transition-all duration-500`} style={{width:`${value}%`}} /></div>
+  </div>
+);
+const Card = ({ children, className='' }) => <div className={`print-card bg-anthro-surface border border-anthro-border p-6 md:p-8 ${className}`}>{children}</div>;
+
+const Hero = () => (
+  <section className="hero-gradient pt-20 pb-28 px-6 md:px-12 lg:px-20 overflow-hidden">
+    <div className="max-w-6xl mx-auto">
+      <div className="flex items-center gap-3 mb-10 anim-fade-up"><div className="w-2 h-2 rounded-full bg-anthro-accent anim-pulse-soft"/><Eyebrow>§01 · Product Manager, Consumer Brief · Prepared for Anthropic · May 2026</Eyebrow></div>
+      <h1 className="font-display text-4xl md:text-6xl lg:text-7xl text-anthro-primary leading-[1.02] mb-10 anim-fade-up max-w-5xl">Anthropic has earned trust around frontier AI; the next consumer question is whether Claude can become the build-and-run layer for customer-specific software.</h1>
+      <div className="max-w-3xl space-y-5 text-anthro-body font-body text-lg leading-relaxed anim-fade-up">
+        <p>Prepared by <span className="text-anthro-primary">Kelvin Zee</span> for the Product Manager, Consumer role. My work has been associated with novel consumer products and subscription systems where complex value had to become understandable before it could scale: T-Mobile JUMP!, T-Mobile ONE, Billing & Benefits, and Amazon Prime engagement. At Amazon, the operating cadence was associated with +23% renewals, +17% shopping activity, 30M+ monthly benefit utilizations, and &gt;1B monthly impressions.</p>
+        <p>This brief is not a claim that every SaaS category gets replaced. It is a set of hypotheses about whether Claude can help individuals, small businesses, midsize teams, and enterprise functions build, deploy, and run customer-specific tools they would otherwise rent through monthly, annual, or per-seat SaaS products. The useful question is which workflows can move into a Claude-centered build-and-run subscription, and which still require a partner, platform, or human operator.</p>
+        <p><span className="font-mono text-xs tracking-widest uppercase text-anthro-accent block mb-2">If you only read three lines</span>Claude appears to be moving from an answer surface toward a software creation surface: describe the workflow, generate the interface, build the logic, connect the data, and deploy the result. The spend shift only happens if Claude or a bundled partner solves the layer SaaS vendors hide: hosting, auth, permissions, reliability, support, rollback, and cost visibility. The open opportunity is to test which workflows can move from rented SaaS seats into a Claude-centered build-and-run subscription, and which ones should remain prototypes, copilots, or human-approved tools.</p>
+      </div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-anthro-border/70 mt-16 border border-anthro-border anim-fade-up">{HERO_STATS.map((stat)=><div key={stat.label} className="bg-anthro-surface p-6 md:p-8"><div className="font-display text-3xl md:text-4xl text-anthro-accent num-display mb-2">{stat.num}</div><div className="text-anthro-primary text-sm mb-1">{stat.label}</div><div className="font-mono text-[10px] text-anthro-muted tracking-wide">{stat.sub}</div></div>)}</div>
+      <div className="mt-16 grid md:grid-cols-3 gap-px bg-anthro-border/70 border border-anthro-border anim-fade-up">{[
+        ['3-minute read','High level','Hero, §02, §08, and §13. The build-and-run setup, the highest-confidence hypotheses, and the profile bridge.'],
+        ['15-minute read','Validation path','Add §04, §05, §06, §09, and §11. The current surface, field map, user shift, readiness lab, and first 90 days.'],
+        ['Full brief','Deep read','All sections, including the analogy stack, segment map, framework to validate, open questions, and profile bridge.']
+      ].map(([tag,heading,body])=><div key={tag} className="bg-anthro-surface p-6"><Eyebrow className="mb-3 text-anthro-accent">{tag}</Eyebrow><div className="font-display text-lg text-anthro-primary mb-2">{heading}</div><p className="font-body text-sm text-anthro-muted leading-relaxed">{body}</p></div>)}</div>
+      <div className="mt-16 flex items-center gap-3 text-anthro-muted"><ArrowDown size={16} className="anim-pulse-soft"/><span className="font-mono text-xs tracking-widest uppercase">Begin brief</span></div>
+    </div>
+  </section>
+);
+
+const SetupSection = () => <section className="px-6 md:px-12 lg:px-20 py-24 border-t border-anthro-border"><div className="max-w-6xl mx-auto"><SectionHeader num="02" label="The Setup" title="Three forces make the Consumer PM role a build-and-run subscription problem: spend, stack, and boundary." lead="The sharper opportunity is not only helping users build software from prompts. It is whether Claude can package enough of the build, deploy, run, and govern layers that customers can replace narrow SaaS workflows without inheriting hidden reliability, permission, support, or cost risk."/><div className="grid md:grid-cols-3 gap-px bg-anthro-border/70 border border-anthro-border">{SETUP_CARDS.map(card=><div key={card.tag} className="bg-anthro-surface p-8"><Eyebrow className="mb-5 text-anthro-accent">{card.tag}</Eyebrow><h3 className="font-display text-2xl text-anthro-primary leading-tight mb-4">{card.head}</h3><p className="font-body text-anthro-body leading-relaxed mb-6">{card.body}</p><div className="font-mono text-[11px] text-anthro-muted pt-5 border-t border-anthro-border">{card.stat}</div></div>)}</div></div></section>;
+
+const AnalogySection = () => {
+  const [active,setActive]=useState(3);
+  const phase=ANALOGY_PHASES[active];
+  const works=[
+    'Spend shifts when customers can buy a simpler operating promise instead of managing each underlying mechanism themselves.',
+    'The entity that captures more spend usually bundles more of the stack: product rules, billing, support, reliability, and recovery.',
+    'A novel product becomes repeatable when the customer promise survives edge cases, not only the first successful demo.',
+    'Usage, cost, and permission anxiety can block adoption even when the underlying capability is valuable.',
+    'Recognized value matters. Customers need to understand what is included, what is excluded, and what changes when they upgrade.',
+    'Support contacts, failed self-service attempts, and confusion around rules are product signals about where the operating boundary is not visible.'
+  ];
+  const breaks=[
+    'Wireless consolidated around network access; build-and-run software requires code quality, hosting, auth, data, security, observability, maintenance, and workflow fit.',
+    'Unlimited wireless usage is not a clean analogy for AI inference, tool calls, generated code, or hosted runtime cost.',
+    'SaaS vendors provide contractual risk transfer, admin controls, audit logs, integrations, uptime commitments, and support that a generated tool may not replicate quickly.',
+    'A Claude-built tool can fail after launch through stale data, broken integrations, permission mistakes, model variance, or unclear ownership.',
+    'Customer-facing software adds external-user risk: identity, privacy, uptime, brand trust, and support burden.',
+    'The likely shift is workflow-by-workflow first, not broad replacement of mature systems of record.'
+  ];
+  return <section className="px-6 md:px-12 lg:px-20 py-24 border-t border-anthro-border"><div className="max-w-6xl mx-auto">
+    <SectionHeader num="03" label="The Analogy" title="Telecom’s useful lesson is how spend moves when a company bundles complexity into one understandable operating promise." lead="I would use T-Mobile carefully here. Useful as a bundling, trust, and operating-surface analogy. Misleading as a literal economics analogy, because build-and-run software has different runtime, reliability, support, and governance burdens."/>
+    <div className="grid md:grid-cols-6 gap-px bg-anthro-border border border-anthro-border mb-8">{ANALOGY_PHASES.map((p,i)=><button key={p.label} onClick={()=>setActive(i)} className={`text-left p-4 bg-anthro-surface ${active===i?'ring-2 ring-inset ring-anthro-accent':''}`}><Eyebrow className={p.pivot?'text-anthro-accent':''}>{p.pivot?'Inflection point':'Phase'}</Eyebrow><div className="font-display text-sm text-anthro-primary mt-2">{p.label}</div></button>)}</div>
+    <Card className="mb-10"><div className="grid md:grid-cols-3 gap-8"><div><Eyebrow className="mb-3 text-anthro-accent">Customer side</Eyebrow><p className="font-body text-anthro-body leading-relaxed">{phase.detail}</p></div><div><Eyebrow className="mb-3 text-anthro-accent">Claude / build-and-run read</Eyebrow><p className="font-body text-anthro-body leading-relaxed">{phase.read}</p></div><div><Eyebrow className="mb-3 text-anthro-accent">Transfer rule</Eyebrow><p className="font-body text-anthro-body leading-relaxed">The analogy is not that Claude should copy telecom bundles. It is that subscription spend moves when a company takes a complex operating stack and gives the customer one legible product promise: what it does, what is included, who owns it, and what happens when it fails.</p></div></div></Card>
+    <div className="grid md:grid-cols-2 gap-px bg-anthro-border border border-anthro-border mb-10"><Card><Eyebrow className="mb-4 text-anthro-accent">Where this analogy works</Eyebrow><ul className="space-y-3 text-sm text-anthro-body">{works.map(x=><li key={x} className="flex gap-2"><Check size={14} className="mt-1 text-anthro-accent flex-shrink-0"/>{x}</li>)}</ul></Card><Card><Eyebrow className="mb-4 text-anthro-warning">Where this analogy breaks</Eyebrow><ul className="space-y-3 text-sm text-anthro-body">{breaks.map(x=><li key={x} className="flex gap-2"><X size={14} className="mt-1 text-anthro-warning flex-shrink-0"/>{x}</li>)}</ul></Card></div>
+    <PullQuote>The telecom analogy is useful for one mechanism: spend moves when complexity is bundled into an operating promise customers can understand. It breaks if treated as a claim that SaaS disappears quickly. The more defensible bet is narrower: Claude may earn build-and-run subscription spend where customers can replace a specific rented workflow and understand the runtime, permission, reliability, cost, and support boundary.</PullQuote>
+  </div></section>
+};
+
+const TodaySurfaceSection = () => {
+  const architectureRows = [
+    {
+      layer: 'Intent and spec',
+      current: 'Chat, projects, memory, files, and user preferences let a user describe a workflow before they know how to write a product spec.',
+      mechanism: 'This is the first build-and-run handoff: Claude has to turn messy intent into a stable definition of the user, workflow, data, permissions, expected output, and failure cost.',
+      question: 'Which requests are one-off help, and which are repeat workflows that deserve a reusable tool?'
+    },
+    {
+      layer: 'Design and prototype',
+      current: 'Artifacts and Claude Design let users move from explanation to editable output: documents, prototypes, slides, one-pagers, flows, and visual drafts.',
+      mechanism: 'The prototype is where demand becomes observable. Edits, continuation, sharing, export, and design-to-code handoff are stronger signals than a user saying the idea is interesting.',
+      question: 'Which prototypes become work surfaces that users return to, and which are treated as one-time drafts?'
+    },
+    {
+      layer: 'Build surface',
+      current: 'Claude Code, code execution, and app-adjacent workflows make the software-building path more explicit for PMs, operators, founders, small businesses, and teams without enough engineering capacity.',
+      mechanism: 'This is where a Claude-centered subscription can start to compete with rented SaaS: requirements, code, tests, versioning, and repair need to become understandable to non-specialists.',
+      question: 'Where can Claude produce a working narrow tool without hiding the engineering and maintenance burden?'
+    },
+    {
+      layer: 'Runtime layer',
+      current: 'The current public surface is strongest at intent, prototype, and build. The runtime layer is less explicit: database, auth, storage, hosting, environments, observability, rollback, uptime, and support.',
+      mechanism: 'This is the strategic gap. Anthropic could own parts of it, bundle a partner such as a Supabase/Vercel-style backend and hosting layer, or route customers to external deployment paths.',
+      question: 'Which runtime pieces should Anthropic own, which should be bundled, and which should remain customer-managed?'
+    },
+    {
+      layer: 'Governance and billing',
+      current: 'Usage limits, model access, plan differences, admin controls, incognito chats, connector permissions, and enterprise retention settings already expose pieces of a governance system.',
+      mechanism: 'A build-and-run subscription has to make ownership visible: who can access the tool, what data it uses, what Claude can change, what it costs, how it fails, and who supports it.',
+      question: 'What must be visible before a customer trusts a Claude-built tool as software they rely on?'
+    }
+  ];
+
+  const architectureImplications = [
+    ['Surface strength', 'Claude already has many of the primitives needed for customer-specific software: chat, artifacts, projects, memory, connectors, code execution, Claude Design, and Claude Code.'],
+    ['Strategic gap', 'The harder layer is not generating the first version. It is packaging deployment, auth, database, hosting, rollback, support, and billing into something a customer can trust.'],
+    ['Product choice', 'Anthropic does not have to own every layer, but the customer experience likely needs one legible promise: build the tool, run the tool, understand the boundary, and know who fixes it.'],
+    ['Validation path', 'I would instrument the handoffs before changing architecture: design-to-code handoff, Claude Code use by non-engineers, hosted-tool demand, connector activation, rollback needs, and support contacts.']
+  ];
+
+  const stackMap = [
+    ['Build', 'Claude-led', 'Intent capture, design drafts, artifacts, code generation, tests, repair suggestions.'],
+    ['Connect', 'Shared', 'Files, web, connectors, MCP-style integrations, source scope, permissions, data freshness.'],
+    ['Run', 'Partner-or-own decision', 'Database, auth, storage, hosting, environments, observability, rollback, uptime.'],
+    ['Govern', 'Anthropic-led for trust', 'Admin controls, audit trails, usage limits, model access, retention, approval paths.'],
+    ['Commercialize', 'Strategic choice', 'Pro/Max add-on, builder bundle, hosted-tool subscription, usage-based agent runtime, enterprise package.']
+  ];
+
+  const notClaim = [
+    'I would not claim Claude is already a full build-and-run platform from the outside.',
+    'I would not treat generated code or a prototype as the same thing as deployed, maintained, customer-facing software.',
+    'I would not assume Anthropic should build every backend, database, auth, hosting, and monitoring layer itself.',
+    'I would not hide reliability, permissions, data access, rollback, billing, or support work behind a simple builder message.'
+  ];
+
+  return <section className="px-6 md:px-12 lg:px-20 py-24 border-t border-anthro-border"><div className="max-w-6xl mx-auto"><SectionHeader num="04" label="Today’s Consumer Surface" title="Claude has many of the build primitives; the open product question is the run layer." lead="The current public surface can already move a user from intent to prototype to code. The build-and-run subscription thesis depends on whether Anthropic can also make deployment, runtime, governance, support, and billing feel like one understandable product promise."/><div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-10 mb-12"><div className="space-y-5 font-body text-base md:text-lg text-anthro-body leading-relaxed"><p>The current Claude surface suggests Anthropic is already working on more than model access. Claude can answer, create artifacts, remember context, connect to outside information, execute code, support design work, and help users build with Claude Code. Those are the primitives for customer-specific software: workflow definition, editable prototype, code or automation, data access, and operating boundary.</p><p>The harder question is what happens after the first working version. SaaS vendors earn monthly, annual, or per-seat spend because they hide the boring operating layer: auth, database, hosting, integrations, permissions, reliability, support, admin controls, and billing. A Claude-centered build-and-run subscription would need to absorb, bundle, or partner for enough of that layer that customers do not inherit a fragile tool they cannot maintain.</p><p>I would not read today’s surface as incomplete in a negative sense. I would read it as a set of powerful build surfaces approaching a runtime decision. The strategic question is whether Anthropic wants Claude to stop at generated software, partner for deployment, or package a more complete build-and-run experience where the customer pays Anthropic for the outcome instead of renting a narrow SaaS workflow.</p></div><Card className="h-fit"><Eyebrow className="mb-5 text-anthro-accent">Outside-in read</Eyebrow>{architectureImplications.map(([head, body])=><div key={head} className="py-5 border-t border-anthro-border first:border-t-0 first:pt-0 last:pb-0"><div className="font-display text-lg text-anthro-primary mb-2">{head}</div><p className="text-sm text-anthro-muted leading-relaxed">{body}</p></div>)}</Card></div><div className="bg-anthro-border border border-anthro-border mb-12">{architectureRows.map(row=><div key={row.layer} className="grid lg:grid-cols-[0.8fr_1.2fr_1.35fr_1.05fr] bg-anthro-surface border-b border-anthro-border last:border-b-0"><div className="p-5 lg:border-r border-anthro-border"><Eyebrow className="mb-2">Layer</Eyebrow><div className="font-display text-lg text-anthro-primary">{row.layer}</div></div><div className="p-5 lg:border-r border-anthro-border"><Eyebrow className="mb-2">Current surface</Eyebrow><p className="text-sm text-anthro-body leading-relaxed">{row.current}</p></div><div className="p-5 lg:border-r border-anthro-border"><Eyebrow className="mb-2">Product mechanism</Eyebrow><p className="text-sm text-anthro-body leading-relaxed">{row.mechanism}</p></div><div className="p-5"><Eyebrow className="mb-2">Question to instrument</Eyebrow><p className="text-sm text-anthro-muted leading-relaxed">{row.question}</p></div></div>)}</div><div className="grid md:grid-cols-5 gap-px bg-anthro-border border border-anthro-border mb-12">{stackMap.map(([layer, owner, detail])=><div key={layer} className="bg-anthro-surface p-6"><Eyebrow className="mb-3 text-anthro-accent">{layer}</Eyebrow><div className="font-display text-lg text-anthro-primary mb-2">{owner}</div><p className="text-sm text-anthro-body leading-relaxed">{detail}</p></div>)}</div><div className="bg-anthro-surface border border-anthro-border p-8 mb-10"><Eyebrow className="mb-5 text-anthro-warning">What I would not claim</Eyebrow><div className="grid md:grid-cols-2 gap-4">{notClaim.map(item=><div key={item} className="text-sm text-anthro-body flex gap-3"><X size={14} className="mt-1 text-anthro-warning flex-shrink-0"/><span>{item}</span></div>)}</div></div><PullQuote>High confidence that Claude has the build primitives for customer-specific software. Lower confidence that the runtime layer should be first-party, partnered, or customer-managed. I would test the handoff from prototype to hosted operation before treating build-and-run as a new subscription architecture.</PullQuote></div></section>;
+};
+
+const FieldSection = () => (
+  <section className="px-6 md:px-12 lg:px-20 py-24 border-t border-anthro-border">
+    <div className="max-w-6xl mx-auto">
+      <SectionHeader
+        num="05"
+        label="The Field"
+        title="The field is moving from app generation toward build-and-run systems."
+        lead="The relevant comparison set is no longer only AI assistants or coding agents. It is the emerging stack of products that help customers describe a workflow, generate the interface and code, connect data, deploy the tool, and decide who owns reliability after launch."
+      />
+
+      <div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-10 mb-12">
+        <div className="space-y-5 font-body text-base md:text-lg text-anthro-body leading-relaxed">
+          <p>
+            The field around Claude is splitting into build and run layers. One set of products helps users generate: code, screens, prototypes, agents, and workflows. Another set helps those outputs operate: database, auth, storage, hosting, deployment, observability, permissions, rollback, billing, and support. The build-and-run thesis only works if those layers become understandable enough for customers to pay Anthropic, or an Anthropic bundle, instead of another SaaS vendor.
+          </p>
+          <p>
+            This makes the competitive question more specific than whether Claude can generate an app. Replit, Bolt, Lovable, v0, Cursor, Figma, Supabase, Vercel, Microsoft, Google, and vertical SaaS incumbents each own a different part of the customer’s current workflow. Claude’s opportunity is not to copy all of them. It is to decide which layer Anthropic should own directly, which layer it should bundle through partners, and which workflows should stay inside existing systems of record.
+          </p>
+        </div>
+
+        <Card className="h-fit">
+          <Eyebrow className="mb-5 text-anthro-accent">Outside-in read</Eyebrow>
+          {FIELD_READS.map(([head, body]) => (
+            <div key={head} className="py-5 border-t border-anthro-border first:border-t-0 first:pt-0 last:pb-0">
+              <div className="font-display text-lg text-anthro-primary mb-2">{head}</div>
+              <p className="text-sm text-anthro-muted leading-relaxed">{body}</p>
+            </div>
+          ))}
+        </Card>
+      </div>
+
+      <div className="bg-anthro-border border border-anthro-border overflow-hidden mb-10">
+        {FIELD_ROWS.map(([player, surface, layer, claude]) => (
+          <div key={player} className="grid lg:grid-cols-[0.9fr_1.2fr_1.2fr_1.3fr] bg-anthro-surface border-b border-anthro-border last:border-b-0">
+            <div className="p-5 border-b lg:border-b-0 lg:border-r border-anthro-border">
+              <Eyebrow className="mb-2">Player</Eyebrow>
+              <div className="font-display text-lg text-anthro-primary">{player}</div>
+            </div>
+            <div className="p-5 border-b lg:border-b-0 lg:border-r border-anthro-border">
+              <Eyebrow className="mb-2">Current wedge</Eyebrow>
+              <p className="text-sm text-anthro-body leading-relaxed">{surface}</p>
+            </div>
+            <div className="p-5 border-b lg:border-b-0 lg:border-r border-anthro-border">
+              <Eyebrow className="mb-2">Build-and-run layer</Eyebrow>
+              <p className="text-sm text-anthro-body leading-relaxed">{layer}</p>
+            </div>
+            <div className="p-5">
+              <Eyebrow className="mb-2">Why it matters</Eyebrow>
+              <p className="text-sm text-anthro-body leading-relaxed">{claude}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="grid md:grid-cols-3 gap-px bg-anthro-border border border-anthro-border mb-10">
+        {[
+          ['Build layer', 'Claude Code, Claude Design, artifacts, and agent tooling make the creation side credible.'],
+          ['Run layer', 'Auth, database, hosting, monitoring, rollback, uptime, billing, and support are the harder product and partner questions.'],
+          ['Spend layer', 'The dollars move only when the customer trusts the generated tool enough to replace a rented workflow.']
+        ].map(([head, body]) => (
+          <div key={head} className="bg-anthro-surface p-6">
+            <Eyebrow className="mb-3 text-anthro-accent">Field lens</Eyebrow>
+            <div className="font-display text-xl text-anthro-primary mb-2">{head}</div>
+            <p className="text-sm text-anthro-body leading-relaxed">{body}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="bg-anthro-surface border border-anthro-border p-8 mb-10">
+        <Eyebrow className="mb-5 text-anthro-warning">What I would not claim</Eyebrow>
+        <div className="grid md:grid-cols-2 gap-4">
+          {FIELD_NOT_CLAIM.map(item => (
+            <div key={item} className="text-sm text-anthro-body flex gap-3">
+              <X size={14} className="mt-1 text-anthro-warning flex-shrink-0"/>
+              <span>{item}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <PullQuote>
+        The field is not only moving from answers to apps. It is moving from apps to operating bundles. Claude’s consumer opportunity may be to make the full path understandable: describe the workflow, generate the tool, connect the data, run it somewhere reliable, and know who owns the boundary when it breaks.
+      </PullQuote>
+    </div>
+  </section>
+);
+
+const UserShiftSection = () => <section className="px-6 md:px-12 lg:px-20 py-24 border-t border-anthro-border"><div className="max-w-6xl mx-auto"><SectionHeader num="06" label="The User Shift" title="Users are moving from choosing software to specifying the workflow they want software to run." lead="The sharper consumer shift is not chat to agent. It is customer-specific software: a user describes the workflow, Claude helps build the tool, and the product has to make hosting, governance, support, and cost understandable before the result can replace rented software."/><div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-10 mb-14"><div className="space-y-5 font-body text-base md:text-lg text-anthro-body leading-relaxed"><p>The early LLM habit was simple: ask a question, get an answer, and decide whether the answer was useful. The next habit is more structural: describe a workflow, generate the first interface or code, connect the right data, deploy the result, and decide whether it can run as part of a real operating system.</p><p>This is where the SaaS spend thesis becomes more specific. Customers do not only pay SaaS vendors for features. They pay for the bundled operating layer: hosting, auth, permissions, integrations, uptime, support, billing, admin controls, and a roadmap they do not have to maintain. Claude can redirect part of that spend only if the product helps customers build the tool and makes the run layer visible enough to trust.</p><p>Anthropic’s public products make the build side plausible without proving the full build-and-run thesis. Claude Code gives users a path from intent to code, while Claude Design moves earlier in the funnel by turning ideas into prototypes, slides, one-pagers, and visual work. The harder product question is what happens after the first useful build: where it runs, who owns it, how it is updated, and what the customer pays for over time.</p><p>I would not frame this as “all SaaS goes away.” The stronger claim is narrower: workflow-specific jobs may move from rented software to customer-specific tools when custom fit matters more than packaged breadth, and when Anthropic can own, bundle, or partner for enough of the runtime boundary.</p></div><Card className="h-fit"><Eyebrow className="mb-5 text-anthro-accent">What changes about the customer job</Eyebrow>{[['Spend pool','The question becomes which monthly, annual, per-seat, or services spend could become Claude usage, hosted-tool subscription, agent operation, or enterprise governance spend.'],['Build-and-run path','The product has to carry the user from workflow description to prototype, code, deployment, monitoring, support, and repeated operation.'],['Ownership split','The customer needs to know what Anthropic owns, what a partner owns, what the customer owns, and where responsibility moves when the tool fails.'],['Product translation','The role is to translate emerging capability into a customer-facing build-and-run path: workflow → tool → runtime → governance → spend capture.']].map(([h,b])=><div key={h} className="py-5 border-t border-anthro-border first:border-t-0 first:pt-0 last:pb-0"><div className="font-display text-lg text-anthro-primary mb-2">{h}</div><p className="text-sm text-anthro-muted leading-relaxed">{b}</p></div>)}</Card></div><div className="bg-anthro-border border border-anthro-border mb-12">{USER_SHIFT_ROWS.map(row=><div key={row.shift} className="grid lg:grid-cols-[1fr_1fr_1.2fr_1.4fr] bg-anthro-surface border-b border-anthro-border last:border-b-0"><div className="p-5 lg:border-r border-anthro-border"><Eyebrow className="mb-2">Shift</Eyebrow><div className="font-display text-base text-anthro-primary">{row.shift}</div></div><div className="p-5 lg:border-r border-anthro-border"><Eyebrow className="mb-2">Old expectation</Eyebrow><p className="text-sm text-anthro-muted">{row.old}</p></div><div className="p-5 lg:border-r border-anthro-border"><Eyebrow className="mb-2">New expectation</Eyebrow><p className="text-sm text-anthro-body">{row.next}</p></div><div className="p-5"><Eyebrow className="mb-2">What Claude has to make legible</Eyebrow><p className="text-sm text-anthro-body">{row.legible}</p></div></div>)}</div><div className="bg-anthro-surface border border-anthro-border p-8 mb-10"><Eyebrow className="mb-5 text-anthro-warning">What I would not claim</Eyebrow><div className="grid md:grid-cols-2 gap-4">{USER_SHIFT_NOT_CLAIM.map(item=><div key={item} className="text-sm text-anthro-body flex gap-3"><X size={14} className="mt-1 text-anthro-warning flex-shrink-0"/><span>{item}</span></div>)}</div></div><PullQuote>The user shift is from renting generalized software to asking whether Claude can help create the narrower tool and package enough of the run layer for that tool to be trusted. Spend moves only if build, hosting, permissions, support, and cost become understandable in one product promise.</PullQuote></div></section>;
+
+const SegmentsSection = () => (
+  <section className="px-6 md:px-12 lg:px-20 py-24 border-t border-anthro-border">
+    <div className="max-w-6xl mx-auto">
+      <SectionHeader
+        num="07"
+        label="Customer Segments"
+        title="The segment map should separate who can build from who can safely run customer-specific software."
+        lead="The build-and-run thesis looks different for an individual builder, a small business, a customer-facing operator, and an enterprise function. I would segment by workflow authority, spend owner, runtime expectation, and governance burden rather than by plan tier."
+      />
+      <div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-10 mb-12">
+        <div className="space-y-5 font-body text-base md:text-lg text-anthro-body leading-relaxed">
+          <p>The relevant customer shift is not only that more people can use AI. It is that more people can describe a workflow clearly enough for Claude to help create software around it: a form, dashboard, tracker, approval flow, customer portal, internal queue, script, or lightweight system of record.</p>
+          <p>The segmentation issue is what happens after the first build works. A single user may need a saved personal workflow. A small business may need hosted availability and a simple price. A midsize team may need permissions and observability. A customer-facing business may need uptime, support, and incident ownership before it can put a generated tool in front of customers.</p>
+          <p>High confidence that Claude can serve several of these groups from one product family. Lower confidence that one interface, one runtime model, or one subscription can explain the whole path. The segment map should help decide where a build surface is enough and where Anthropic would need to bundle or partner for the run layer.</p>
+        </div>
+        <Card className="h-fit">
+          <Eyebrow className="mb-5 text-anthro-accent">Segmentation lens</Eyebrow>
+          {[
+            ['Workflow authority','Who understands the process well enough to specify the tool and judge whether it works?'],
+            ['Spend owner','Who pays for the SaaS, services, internal queue, or manual work that could move?'],
+            ['Runtime expectation','Does the customer need a prototype, a hosted tool, a shared team workflow, or a customer-facing product?'],
+            ['Governance burden','What auth, permissions, auditability, support, rollback, and ownership model appears before the tool can be relied on?']
+          ].map(([head, body]) => (
+            <div key={head} className="py-5 border-t border-anthro-border first:border-t-0 first:pt-0 last:pb-0">
+              <div className="font-display text-lg text-anthro-primary mb-2">{head}</div>
+              <p className="text-sm text-anthro-muted leading-relaxed">{body}</p>
+            </div>
+          ))}
+        </Card>
+      </div>
+      <div className="bg-anthro-border border border-anthro-border overflow-hidden mb-10">
+        {SEGMENTS.map(seg => (
+          <div key={seg.segment} className="grid lg:grid-cols-[0.85fr_1.15fr_1.2fr_1.1fr_1.05fr] bg-anthro-surface border-b border-anthro-border last:border-b-0">
+            <div className="p-5 border-b lg:border-b-0 lg:border-r border-anthro-border">
+              <Eyebrow className="mb-2 text-anthro-accent">Segment</Eyebrow>
+              <div className="font-display text-lg text-anthro-primary">{seg.segment}</div>
+              <p className="text-xs text-anthro-muted mt-3 leading-relaxed">{seg.customer}</p>
+            </div>
+            <div className="p-5 border-b lg:border-b-0 lg:border-r border-anthro-border">
+              <Eyebrow className="mb-2">Build-and-run job</Eyebrow>
+              <p className="text-sm text-anthro-body leading-relaxed">{seg.buildJob}</p>
+            </div>
+            <div className="p-5 border-b lg:border-b-0 lg:border-r border-anthro-border">
+              <Eyebrow className="mb-2">Spend movement</Eyebrow>
+              <p className="text-sm text-anthro-body leading-relaxed">{seg.spendShift}</p>
+            </div>
+            <div className="p-5 border-b lg:border-b-0 lg:border-r border-anthro-border">
+              <Eyebrow className="mb-2">Run boundary</Eyebrow>
+              <p className="text-sm text-anthro-body leading-relaxed">{seg.boundary}</p>
+            </div>
+            <div className="p-5">
+              <Eyebrow className="mb-2">Metric</Eyebrow>
+              <p className="font-mono text-[11px] text-anthro-muted leading-relaxed">{seg.metric}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="bg-anthro-surface border border-anthro-border p-8 mb-10">
+        <Eyebrow className="mb-5 text-anthro-warning">What I would not claim</Eyebrow>
+        <div className="grid md:grid-cols-2 gap-4">
+          {SEGMENT_NOT_CLAIM.map(item => (
+            <div key={item} className="text-sm text-anthro-body flex gap-3">
+              <X size={14} className="mt-1 text-anthro-warning flex-shrink-0" />
+              <span>{item}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <PullQuote>The segment question is not who likes AI chat. It is who can specify the workflow, who owns the spend, and what run boundary has to be packaged before a generated tool can replace rented software.</PullQuote>
+    </div>
+  </section>
+);
+
+const HypothesesSection = () => <section className="px-6 md:px-12 lg:px-20 py-24 border-t border-anthro-border"><div className="max-w-6xl mx-auto"><SectionHeader num="08" label="Hypotheses" title="The build-and-run subscription thesis should be tested at the runtime boundary, not declared as a category claim." lead="These are not recommendations to ship. They are hypotheses about where Claude could move customers from rented software into customer-specific tools, and what evidence would have to be visible before Anthropic owns, bundles, or partners for the run layer."/><div className="grid md:grid-cols-2 gap-px bg-anthro-border border border-anthro-border">{HYPOTHESES.map(h=><Card key={h.id} className={h.isStartingPoint?'ring-2 ring-inset ring-anthro-accent':''}><div className="flex items-baseline gap-3 mb-4"><span className="font-display text-5xl text-anthro-muted">{h.id}</span><Eyebrow>{h.isStartingPoint?'Highest confidence start':'Hypothesis'}</Eyebrow></div><h3 className="font-display text-2xl text-anthro-primary mb-4">{h.title}</h3><p className="text-anthro-body mb-6">{h.summary}</p><div className="space-y-4 text-sm"><div><Eyebrow className="mb-2 text-anthro-accent">Why this might be true</Eyebrow><p>{h.why}</p></div><div><Eyebrow className="mb-2 text-anthro-warning">Why this might be wrong</Eyebrow><p>{h.risk}</p></div><div><Eyebrow className="mb-2">What would resolve this</Eyebrow><p>{h.validate}</p></div></div><div className="pt-5 mt-5 border-t border-anthro-border"><Eyebrow className="mb-2">Confidence</Eyebrow><p className={h.confidenceTone==='emerald'?'text-anthro-accent italic':'text-anthro-warning italic'}>{h.confidence}</p></div></Card>)}</div></div></section>;
+
+const ProductBetBuilder = () => {
+  const workflows = [
+    {
+      name:'Internal ops tool',
+      analogue:'Airtable, Monday, Asana, Zapier workflows, custom queues',
+      marketLogic:'Default wedge: broad horizontal spend, repeated workflows, lower external switching risk than CRM or ERP, and clear pain from seat sprawl and manual operations.',
+      rentedLayer:'SaaS handles shared queues, statuses, approvals, notifications, permissions, reporting, process ownership, and basic admin controls.',
+      buildJob:'A team describes the queue, approval rules, exceptions, owner handoffs, and weekly review; Claude generates the tool, runbook, and first operating dashboard.',
+      spendToday:'Point SaaS seats, no-code tools, spreadsheet operations, internal ticket queues, Zapier-style automation, and services work.',
+      trustToEarn:'Anthropic would need to show the generated tool has a named owner, permission model, version history, integration status, exception queue, and recovery path.',
+      stillWins:'Incumbent SaaS still wins when it owns a mature system of record, deep reporting history, complex admin controls, or workflows that are already embedded across many teams.',
+      spend:78,
+      build:78,
+      runtime:58,
+      governance:58,
+      partner:56,
+      switching:34,
+      firstTest:'Build one internal queue with one approval path, one integration, and telemetry for manual steps removed per repeat run.',
+      kill:'Kill or reshape if the tool removes steps but creates more maintenance work than it saves, or if the team cannot name who owns it after week two.',
+      boundary:'Tool owner, version history, permission scope, integration status, exception queue, and recovery path.',
+      layerReadiness:{intent:86, design:74, code:74, backend:58, hosting:54, govern:58, support:50},
+      failure:'No owner after the prototype works, duplicate data from a better system of record, or too many exceptions for the generated workflow.'
+    },
+    {
+      name:'Customer intake',
+      analogue:'Forms, onboarding, support intake, lead qualification',
+      marketLogic:'Large horizontal need with low initial switching friction when the workflow is narrow and the output can still route into existing CRM or support tools.',
+      rentedLayer:'SaaS handles forms, routing, validation, notifications, CRM handoff, compliance language, and support escalation.',
+      buildJob:'A customer describes the intake flow, fields, rules, output, and escalation path; Claude generates the surface and operating logic.',
+      spendToday:'Form tools, CRM add-ons, onboarding software, support intake, and services work.',
+      trustToEarn:'Anthropic would need to make data capture, destination system, reviewer, retention expectation, escalation path, and rollback understandable to the user.',
+      stillWins:'SaaS still wins when intake is tied to compliance, regulated records, enterprise CRM governance, or a high-volume support operation.',
+      spend:68,
+      build:80,
+      runtime:48,
+      governance:50,
+      partner:42,
+      switching:28,
+      firstTest:'Run 8 to 10 workflow interviews around intake pain, then prototype one intake flow with a generated form, rules summary, and owner review.',
+      kill:'Kill or reshape if users cannot name the repeated intake job, if the output owner is unclear, or if support escalation remains manual and ambiguous.',
+      boundary:'Data captured, destination system, reviewer, retention expectation, escalation path, and rollback path.',
+      layerReadiness:{intent:84, design:78, code:72, backend:54, hosting:48, govern:52, support:46},
+      failure:'Wrong routing, missing customer data, unclear ownership, or a support handoff no one owns.'
+    },
+    {
+      name:'Reporting dashboard',
+      analogue:'BI dashboards, Airtable reports, ops reviews, spreadsheet reporting',
+      marketLogic:'Broad spend pool and low first-test friction, especially where teams already rebuild reports manually. Switching gets harder when the report becomes a source of record.',
+      rentedLayer:'SaaS handles the dashboard, data refresh, permissions, charts, alerts, lineage, and recurring review workflow.',
+      buildJob:'A customer defines the operating questions, source files, metrics, cadence, and narrative output; Claude generates the report surface and assumptions log.',
+      spendToday:'BI seats, spreadsheet maintenance, analyst time, dashboard tools, and recurring reporting operations.',
+      trustToEarn:'Anthropic would need source mapping, freshness labels, calculation assumptions, permission scope, and stale-data warnings before a team trusts the output.',
+      stillWins:'BI SaaS still wins when governed metrics, lineage, semantic layers, enterprise permissions, and audit history are more important than speed or custom fit.',
+      spend:72,
+      build:82,
+      runtime:56,
+      governance:60,
+      partner:48,
+      switching:36,
+      firstTest:'Prototype one recurring report with 3 to 5 source inputs, source freshness labels, and a week-two regeneration test.',
+      kill:'Kill or reshape if users do not return for the second report or cannot trust the source mapping and calculation assumptions.',
+      boundary:'Source files, refresh timing, calculation assumptions, owner approval, stale-data warning, and export path.',
+      layerReadiness:{intent:86, design:82, code:74, backend:58, hosting:54, govern:56, support:50},
+      failure:'Stale data, source-of-truth conflict, permission mismatch, or leadership acting on a wrong number.'
+    },
+    {
+      name:'Customer portal',
+      analogue:'Client portals, approval portals, document exchange, status trackers',
+      marketLogic:'Meaningful spend pool, but higher switching barrier because external users expect uptime, identity, support, and clear ownership.',
+      rentedLayer:'SaaS handles external identity, document access, status visibility, approvals, notifications, uptime, and customer support expectations.',
+      buildJob:'A customer defines a narrow external workflow; Claude generates a portal-like surface with limited roles, data scope, approvals, and change history.',
+      spendToday:'Portal software, customer-success tools, document portals, approval workflows, and custom services work.',
+      trustToEarn:'Anthropic would need external identity, access controls, uptime expectations, support ownership, audit logs, and rollback before external customers depend on it.',
+      stillWins:'Portal SaaS still wins when external trust, compliance, SLAs, customer support, and long-lived account history matter more than custom fit.',
+      spend:76,
+      build:62,
+      runtime:78,
+      governance:80,
+      partner:68,
+      switching:64,
+      firstTest:'Build a constrained portal for one external role, one document or request flow, and one human approval gate before any broad sharing.',
+      kill:'Kill or reshape if customers cannot explain who owns the tool when it fails or if access control is more complex than the workflow.',
+      boundary:'External access, role scope, data scope, approver, uptime expectation, rollback, and support path.',
+      layerReadiness:{intent:74, design:76, code:64, backend:46, hosting:40, govern:42, support:38},
+      failure:'External user sees wrong data, loses access, cannot complete a request, or expects SaaS-level support from a generated tool.'
+    },
+    {
+      name:'Agentic workflow',
+      analogue:'CRM updates, support resolution, recurring actions, workflow automation',
+      marketLogic:'Large spend pool and high strategic value, but the switching barrier is higher because Claude would operate inside systems of record.',
+      rentedLayer:'SaaS handles rules, records, permissions, workflow state, automation logs, admin controls, and escalation.',
+      buildJob:'A customer defines the recurring action, tool access, approval rules, exception handling, and audit requirement; Claude builds and operates only inside those boundaries.',
+      spendToday:'Automation platforms, CRM seats, support tooling, services work, and manual operations labor.',
+      trustToEarn:'Anthropic would need approvals, logs, rollback, exception routing, rate limits, support ownership, and visible human control before it operates customer-impacting work.',
+      stillWins:'Workflow SaaS still wins when records are regulated, actions are irreversible, teams need mature admin tooling, or failures create customer-visible harm.',
+      spend:86,
+      build:66,
+      runtime:86,
+      governance:88,
+      partner:72,
+      switching:78,
+      firstTest:'Start with a human-approved agent that proposes actions, writes logs, and routes exceptions before executing any customer-impacting step.',
+      kill:'Kill or reshape if approvals are not understood, rollback is not trusted, or the cost of exception handling exceeds the value of automation.',
+      boundary:'Tool permissions, approval gate, audit log, rollback, exception owner, rate limit, and support path.',
+      layerReadiness:{intent:76, design:62, code:66, backend:50, hosting:42, govern:38, support:36},
+      failure:'Incorrect record update, unexpected customer communication, missing audit trail, or no rollback path after an agent action.'
+    }
+  ];
+
+  const runtimes = [
+    {
+      name:'Prototype only',
+      desc:'Claude builds a demo, artifact, or internal proof. The customer keeps the SaaS system for operations.',
+      mode:'Learning surface',
+      commercial:'Prompt, artifact, or builder usage inside Pro, Max, Team, or Enterprise.',
+      partnerNeed:'No runtime partner is needed yet. The test should not imply hosted reliability.',
+      own:'Anthropic owns idea translation, design, code suggestions, and prototype quality.',
+      bundle:'No runtime bundle. Make the limitation explicit.',
+      spend: -10,
+      build: 8,
+      runtime: -22,
+      governance: -18,
+      partner: -18,
+      learning: 18,
+      readiness: 4,
+      owner:{intent:'Anthropic', design:'Anthropic', code:'Shared', backend:'Customer', hosting:'Customer', govern:'Customer', support:'Customer'},
+      subscription:'Included builder usage'
+    },
+    {
+      name:'Customer-managed runtime',
+      desc:'Claude builds the tool, but the customer deploys, hosts, and maintains it.',
+      mode:'Build assistant',
+      commercial:'Builder subscription or usage expansion, with the customer still paying infrastructure separately.',
+      partnerNeed:'Low. The customer or their developer team carries backend and hosting.',
+      own:'Anthropic owns build quality, review, tests, and repair suggestions.',
+      bundle:'Deployment checklist, code review, test status, and handoff documentation.',
+      spend: 2,
+      build: 12,
+      runtime: -8,
+      governance: -4,
+      partner: -8,
+      learning: 8,
+      readiness: 8,
+      owner:{intent:'Anthropic', design:'Anthropic', code:'Anthropic', backend:'Customer', hosting:'Customer', govern:'Customer', support:'Customer'},
+      subscription:'Builder add-on'
+    },
+    {
+      name:'Partner-hosted app',
+      desc:'Claude builds the tool and a partner provides auth, database, storage, hosting, deployment, and rollback.',
+      mode:'Bundled partner runtime',
+      commercial:'Build-and-run subscription with Supabase/Vercel/Replit-style runtime bundled or attached.',
+      partnerNeed:'High. Examples include a Supabase-style backend partner for auth, Postgres, storage, and functions; a Vercel-style hosting partner for deployment and observability; or a Replit-style hosted development/runtime surface.',
+      own:'Anthropic owns product generation and repair logic; partner owns much of the runtime substrate.',
+      bundle:'Auth, database, storage, hosting, observability, rollback, and usage-cost visibility.',
+      spend: 18,
+      build: 10,
+      runtime: 4,
+      governance: 4,
+      partner: 20,
+      learning: 2,
+      readiness: 18,
+      owner:{intent:'Anthropic', design:'Anthropic', code:'Anthropic', backend:'Partner', hosting:'Partner', govern:'Shared', support:'Shared'},
+      subscription:'Hosted tool bundle'
+    },
+    {
+      name:'Anthropic-managed tool',
+      desc:'The Claude subscription includes tool creation, hosting, access control, monitoring, repair, and support boundaries.',
+      mode:'Managed tool subscription',
+      commercial:'New build-and-run package where customers pay Anthropic for the generated tool and its operation.',
+      partnerNeed:'Medium to high unless Anthropic builds or acquires the runtime layer.',
+      own:'Anthropic owns the customer promise across build quality, uptime, permissions, cost, support, and repair.',
+      bundle:'Runtime, admin controls, monitoring, rollback, support ownership, and billing rules.',
+      spend: 26,
+      build: 4,
+      runtime: 18,
+      governance: 18,
+      partner: 12,
+      learning: -4,
+      readiness: 22,
+      owner:{intent:'Anthropic', design:'Anthropic', code:'Anthropic', backend:'Anthropic/Partner', hosting:'Anthropic/Partner', govern:'Anthropic', support:'Anthropic'},
+      subscription:'Managed app subscription'
+    },
+    {
+      name:'Governed agent system',
+      desc:'Claude not only runs the tool, but performs recurring work with approvals, logs, exceptions, and repair proposals.',
+      mode:'Agent operations package',
+      commercial:'Usage-based agent runtime plus governance, audit, and support tier.',
+      partnerNeed:'Medium. Runtime may be partner-backed, but Anthropic likely owns the agent-control plane.',
+      own:'Anthropic owns action boundaries, approval design, failure recovery, and telemetry around agent operation.',
+      bundle:'Approvals, audit logs, exception routing, rollback, run history, and change proposals.',
+      spend: 30,
+      build: -2,
+      runtime: 28,
+      governance: 30,
+      partner: 14,
+      learning: -8,
+      readiness: 20,
+      owner:{intent:'Anthropic', design:'Anthropic', code:'Anthropic', backend:'Shared', hosting:'Shared', govern:'Anthropic', support:'Anthropic'},
+      subscription:'Agent operations tier'
+    }
+  ];
+
+  const scales = [
+    { name:'Individual builder', desc:'One person wants a tool for their own workflow. Fastest learning and lowest governance burden.', target:'individual builder', spend:-8, build:12, runtime:-18, governance:-16, partner:-12, switching:-18, learning:16 },
+    { name:'Small business', desc:'Strong SaaS pain, limited engineering capacity, and a need for one simple hosted promise.', target:'small business', spend:10, build:6, runtime:2, governance:4, partner:4, switching:-8, learning:8 },
+    { name:'Midsize team', desc:'Largest attainable default wedge: repeated workflows, shared spend, enough pain to pay, and lower switching friction than enterprise systems of record.', target:'midsize team', spend:16, build:0, runtime:10, governance:12, partner:8, switching:2, learning:2 },
+    { name:'Enterprise function', desc:'Larger spend pool with procurement, security, compliance, and audit requirements.', target:'enterprise function', spend:22, build:-8, runtime:24, governance:28, partner:12, switching:24, learning:-4 },
+    { name:'Customer-facing business', desc:'External users, uptime, brand trust, support burden, and visible failure cost.', target:'customer-facing business', spend:24, build:-10, runtime:30, governance:30, partner:16, switching:28, learning:-6 }
+  ];
+
+  const layerLabels = [
+    ['intent','Intent and spec'],
+    ['design','Design surface'],
+    ['code','Code and tests'],
+    ['backend','Auth / data / storage'],
+    ['hosting','Hosting / observability'],
+    ['govern','Governance / admin'],
+    ['support','Support / repair']
+  ];
+
+  const [workflow,setWorkflow]=useState(workflows[0].name);
+  const [runtime,setRuntime]=useState(runtimes[2].name);
+  const [scale,setScale]=useState(scales[2].name);
+  const selectedWorkflow = workflows.find(w => w.name === workflow);
+  const selectedRuntime = runtimes.find(r => r.name === runtime);
+  const selectedScale = scales.find(s => s.name === scale);
+  const clamp = (n) => Math.max(5, Math.min(95, Math.round(n)));
+  const statusFor = (score) => score >= 72 ? 'High' : score >= 50 ? 'Medium' : 'Low';
+  const ownerClass = (owner) => owner.includes('Anthropic') ? 'text-anthro-accent border-anthro-accent/50 bg-anthro-accent/10' : owner.includes('Partner') ? 'text-anthro-warning border-anthro-warning/50 bg-anthro-warning/10' : 'text-anthro-muted border-anthro-border bg-anthro-background';
+
+  const outcome = useMemo(()=>{
+    const spend = clamp(selectedWorkflow.spend + selectedRuntime.spend + selectedScale.spend);
+    const build = clamp(selectedWorkflow.build + selectedRuntime.build + selectedScale.build);
+    const runtimeBurden = clamp(selectedWorkflow.runtime + selectedRuntime.runtime + selectedScale.runtime);
+    const governanceBurden = clamp(selectedWorkflow.governance + selectedRuntime.governance + selectedScale.governance);
+    const partnerDependency = clamp(selectedWorkflow.partner + selectedRuntime.partner + selectedScale.partner);
+    const switchingFriction = clamp(selectedWorkflow.switching + selectedScale.switching);
+    const learning = clamp(72 + selectedRuntime.learning + selectedScale.learning - selectedWorkflow.runtime*0.07 - switchingFriction*0.05);
+    const wedgeFit = clamp((spend*0.30) + (build*0.20) + ((100-runtimeBurden)*0.14) + ((100-governanceBurden)*0.12) + ((100-switchingFriction)*0.14) + (learning*0.10));
+    let decision = 'Prototype before packaging';
+    if (selectedRuntime.name === 'Prototype only') decision = 'Keep as learning surface';
+    else if (runtimeBurden > 82 || governanceBurden > 82) decision = 'Do not package without controls';
+    else if (wedgeFit >= 70 && selectedRuntime.name === 'Partner-hosted app') decision = 'Best near-term platform wedge';
+    else if (selectedRuntime.name === 'Partner-hosted app') decision = 'Test partner-hosted bundle';
+    else if (selectedRuntime.name === 'Anthropic-managed tool') decision = 'Validate managed subscription carefully';
+    else if (selectedRuntime.name === 'Governed agent system') decision = 'Beta only with governance gates';
+    const layers = layerLabels.map(([key,label])=>{
+      const base = selectedWorkflow.layerReadiness[key];
+      const owner = selectedRuntime.owner[key];
+      const penalty = owner === 'Customer' ? 4 : owner.includes('Partner') ? 1 : -2;
+      const score = clamp(base + selectedRuntime.readiness*0.45 + selectedScale.build*0.15 - selectedScale.governance*0.08 - penalty);
+      return {key,label,score,status:statusFor(score),owner};
+    });
+    const stage = [
+      {label:'SaaS seat spend', owner:'Customer', note:selectedWorkflow.spendToday},
+      {label:'Claude build usage', owner:'Anthropic', note:'Intent, design, code generation, tests, and repair suggestions.'},
+      {label:'Hosted runtime', owner:selectedRuntime.owner.backend, note:selectedRuntime.bundle},
+      {label:'Governed operation', owner:selectedRuntime.owner.govern, note:selectedWorkflow.trustToEarn},
+      {label:'Build-and-run subscription', owner:selectedRuntime.subscription, note:selectedRuntime.commercial}
+    ];
+    const partnerMove = partnerDependency >= 70 ? 'A runtime partner or first-party runtime investment is load-bearing.' : partnerDependency >= 48 ? 'A runtime partner is useful, but Anthropic could test the promise before full platform commitment.' : 'Partner need is limited for the first test.';
+    const commercial = `${selectedRuntime.subscription}: ${selectedRuntime.commercial}`;
+    const verdict = `${decision}. High confidence as a strategic platform test for ${selectedWorkflow.name.toLowerCase()} in a ${selectedScale.target} context. Lower confidence as a packaged subscription until Anthropic can show what it owns, what a partner runs, what the customer still controls, and whether spend can move from rented seats into a build-and-run model. The first test should prove ${selectedRuntime.mode.toLowerCase()} behavior before treating this as pricing or packaging work.`;
+    return {spend,build,runtimeBurden,governanceBurden,partnerDependency,switchingFriction,learning,wedgeFit,decision,layers,stage,partnerMove,commercial,verdict};
+  },[workflow,runtime,scale]);
+
+  return <section className="px-6 md:px-12 lg:px-20 py-24 border-t border-anthro-border">
+    <div className="max-w-6xl mx-auto">
+      <SectionHeader num="09" label="Interactive" title="Build-and-Run Readiness Lab" lead="This diagnostic asks which rented workflow is the best platform wedge for a Claude-centered build-and-run subscription. It is designed to pressure-test spend capture, runtime ownership, partner dependency, and the trust work Anthropic would need to produce before customers move monthly, annual, or per-seat software spend."/>
+      <div className="border border-anthro-warning bg-anthro-warning/10 p-5 mb-10">
+        <p className="font-mono text-[11px] text-anthro-warning leading-relaxed">Coefficients are illustrative. Calibration in production would replace these with internal telemetry, partner-runtime data, support signals, marginal cost by workflow, fake-door demand, and customer willingness to move monthly, annual, or per-seat spend.</p>
+      </div>
+
+      <div className="grid lg:grid-cols-3 gap-px bg-anthro-border border border-anthro-border mb-10">
+        <Card><Eyebrow className="mb-3 text-anthro-accent">Default wedge logic</Eyebrow><p className="text-sm text-anthro-body leading-relaxed">I would default the lab to midsize-team internal ops. CRM and ERP have larger category spend, but switching barriers are higher because records, permissions, and admin controls are deeply embedded. Internal ops workflows have broad spend, repeated pain, and lower customer-facing failure cost.</p></Card>
+        <Card><Eyebrow className="mb-3 text-anthro-accent">Spend capture logic</Eyebrow><p className="text-sm text-anthro-body leading-relaxed">The direct product question is whether Claude can shift some SaaS seat spend into a build-and-run subscription: builder usage, hosted runtime, agent operations, and governance. The test should show what Anthropic earns versus what a partner or customer still owns.</p></Card>
+        <Card><Eyebrow className="mb-3 text-anthro-accent">Partner examples</Eyebrow><p className="text-sm text-anthro-body leading-relaxed">A Supabase-style partner could carry auth, Postgres, storage, and functions. A Vercel-style partner could carry deploy, hosting, and observability. A Replit-style partner could carry hosted development and runtime. Anthropic’s strategic choice is what to own over time.</p></Card>
+      </div>
+
+      <div className="grid xl:grid-cols-[0.82fr_1.18fr] gap-10">
+        <Card>
+          <Eyebrow className="mb-4 text-anthro-accent">1 · Workflow customers rent today</Eyebrow>
+          <div className="grid gap-2 mb-8">{workflows.map(w=><button key={w.name} onClick={()=>setWorkflow(w.name)} className={`text-left p-3 border transition ${workflow===w.name?'border-anthro-accent bg-anthro-accent/10':'border-anthro-border bg-anthro-background hover:border-anthro-accent/50'}`}><span className="font-display text-anthro-primary block mb-1">{w.name}</span><span className="text-xs text-anthro-muted leading-relaxed">{w.analogue}</span></button>)}</div>
+          <Eyebrow className="mb-4 text-anthro-accent">2 · Runtime ambition</Eyebrow>
+          <div className="grid gap-2 mb-8">{runtimes.map(r=><button key={r.name} onClick={()=>setRuntime(r.name)} className={`text-left p-3 border transition ${runtime===r.name?'border-anthro-accent bg-anthro-accent/10':'border-anthro-border bg-anthro-background hover:border-anthro-accent/50'}`}><span className="font-display text-anthro-primary block mb-1">{r.name}</span><span className="text-xs text-anthro-muted leading-relaxed">{r.desc}</span></button>)}</div>
+          <Eyebrow className="mb-4 text-anthro-accent">3 · Customer scale</Eyebrow>
+          <div className="grid gap-2">{scales.map(s=><button key={s.name} onClick={()=>setScale(s.name)} className={`text-left p-3 border transition ${scale===s.name?'border-anthro-accent bg-anthro-accent/10':'border-anthro-border bg-anthro-background hover:border-anthro-accent/50'}`}><span className="font-display text-anthro-primary block mb-1">{s.name}</span><span className="text-xs text-anthro-muted leading-relaxed">{s.desc}</span></button>)}</div>
+        </Card>
+
+        <div className="space-y-8">
+          <Card>
+            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
+              <div>
+                <Eyebrow className="mb-2 text-anthro-accent">Current read</Eyebrow>
+                <h3 className="font-display text-2xl text-anthro-primary">{outcome.decision}</h3>
+              </div>
+              <div className="font-mono text-[11px] text-anthro-muted border border-anthro-border bg-anthro-background px-3 py-2">{selectedWorkflow.name} · {selectedRuntime.name} · {selectedScale.name}</div>
+            </div>
+            <div className="mb-8 overflow-x-auto pb-3">
+              <div className="flex items-center justify-between gap-3 mb-4">
+                <Eyebrow className="text-anthro-accent">Money and ownership path</Eyebrow>
+                <div className="mobile-scroll-cue font-mono text-[10px] uppercase tracking-[0.14em] text-anthro-muted border border-anthro-border bg-anthro-background px-2 py-1">Swipe →</div>
+              </div>
+              <svg viewBox="0 0 960 320" className="w-full min-w-[820px] print-avoid">
+                {outcome.stage.map((stage,i)=>{ const x=42+i*180; const isLast=i===outcome.stage.length-1; return <g key={stage.label}>
+                  {i<outcome.stage.length-1 && <path d={`M ${x+138} 104 C ${x+155} 104 ${x+162} 104 ${x+178} 104`} stroke="#d8d3c7" strokeWidth="2" strokeDasharray={i>=2?'5 5':'0'}/>} 
+                  <rect x={x} y="54" width="136" height="104" rx="14" fill={isLast?'#d97757':stage.owner.includes('Partner')?'#f4f2ea':'#faf9f5'} stroke={isLast?'#d97757':'#d8d3c7'} strokeWidth="2"/>
+                  <text x={x+68} y="88" textAnchor="middle" fontSize="12" fontFamily="Geist Mono" fill={isLast?'#faf9f5':'#141413'}>{stage.label}</text>
+                  <text x={x+68} y="118" textAnchor="middle" fontSize="10" fontFamily="Geist Mono" fill={isLast?'#faf9f5':'#6f6a60'}>{stage.owner}</text>
+                </g>})}
+                <text x="42" y="212" fontSize="12" fill="#3d3a34">Market wedge: {selectedWorkflow.marketLogic}</text>
+                <text x="42" y="242" fontSize="12" fill="#3d3a34">SaaS still wins until: {selectedWorkflow.stillWins}</text>
+                <text x="42" y="272" fontSize="12" fill="#6f6a60">Failure mode to design around: {selectedWorkflow.failure}</text>
+              </svg>
+            </div>
+            <div className="grid md:grid-cols-2 gap-5">
+              <MetricMeter label="Spend migration potential" value={outcome.spend}/>
+              <MetricMeter label="Build feasibility" value={outcome.build}/>
+              <MetricMeter label="Time-to-learning" value={outcome.learning}/>
+              <MetricMeter label="Runtime burden" value={outcome.runtimeBurden} lowGood/>
+              <MetricMeter label="Governance burden" value={outcome.governanceBurden} lowGood/>
+              <MetricMeter label="Switching friction" value={outcome.switchingFriction} lowGood/>
+              <MetricMeter label="Partner dependency" value={outcome.partnerDependency} lowGood/>
+              <MetricMeter label="Attainable wedge fit" value={outcome.wedgeFit}/>
+            </div>
+          </Card>
+
+          <Card>
+            <Eyebrow className="mb-5 text-anthro-accent">Partner / own / customer-managed decision</Eyebrow>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">{outcome.layers.map(layer=><div key={layer.key} className="border border-anthro-border bg-anthro-background p-4"><div className="flex items-start justify-between gap-3 mb-2"><div className="font-display text-sm text-anthro-primary">{layer.label}</div><span className={`font-mono text-[10px] uppercase tracking-[0.14em] border px-2 py-1 ${ownerClass(layer.owner)}`}>{layer.owner}</span></div><div className="font-mono text-[11px] text-anthro-muted num-display">readiness {layer.score} · {layer.status}</div></div>)}</div>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="p-4 border border-anthro-border bg-anthro-background"><Eyebrow className="mb-2 text-anthro-accent">Partner logic</Eyebrow><p className="text-sm text-anthro-body leading-relaxed">{outcome.partnerMove} {selectedRuntime.partnerNeed}</p></div>
+              <div className="p-4 border border-anthro-border bg-anthro-background"><Eyebrow className="mb-2 text-anthro-accent">Trust Anthropic must earn</Eyebrow><p className="text-sm text-anthro-body leading-relaxed">{selectedWorkflow.trustToEarn}</p></div>
+            </div>
+          </Card>
+
+          <Card>
+            <Eyebrow className="mb-5 text-anthro-accent">Generated product brief</Eyebrow>
+            <div className="grid md:grid-cols-2 gap-px bg-anthro-border border border-anthro-border mb-6">
+              {[
+                ['Best product form',selectedRuntime.mode],
+                ['Recommended commercial model',outcome.commercial],
+                ['What Anthropic owns',selectedRuntime.own],
+                ['What must be bundled',selectedRuntime.bundle],
+                ['What SaaS still does better',selectedWorkflow.stillWins],
+                ['First test',selectedWorkflow.firstTest],
+                ['Run boundary',selectedWorkflow.boundary],
+                ['Kill criterion',selectedWorkflow.kill],
+                ['Current spend pool',selectedWorkflow.spendToday]
+              ].map(([label,value])=><div key={label} className="bg-anthro-surface p-4"><Eyebrow className="mb-2">{label}</Eyebrow><p className="text-sm text-anthro-body leading-relaxed">{value}</p></div>)}
+            </div>
+            <div className="p-5 bg-anthro-background border border-anthro-border"><Eyebrow className="mb-2 text-anthro-accent">Measured verdict</Eyebrow><p className="text-sm text-anthro-body leading-relaxed">{outcome.verdict}</p></div>
+          </Card>
+        </div>
+      </div>
+    </div>
+  </section>
+};
+
+
+const FrameworkSection = () => {
+  const gates = [
+    {
+      tag: 'Hypothesis gate',
+      title: 'Start with the workflow wedge before naming a category bet.',
+      mechanism: 'The first screen should identify the rented workflow, the current spend owner, and the switching friction. I would not start with “replace CRM” or “replace BI.” I would start with repeated workflows where custom fit matters more than SaaS completeness.',
+      risk: 'A wedge can look attractive because it is narrow, but still fail if the workflow depends on a system of record, deep admin controls, or support obligations the customer does not want to own.',
+      validation: 'Use workflow interviews, fake doors, and current-spend mapping to find where customers already bend Airtable, Monday, spreadsheets, portals, or dashboards into quasi-custom software.'
+    },
+    {
+      tag: 'Hypothesis gate',
+      title: 'Separate build success from run success.',
+      mechanism: 'Claude may be able to generate the first version before the product is safe to operate. The framework should force a separate decision on build surface, runtime layer, governance, and support ownership before treating a tool as subscription-ready.',
+      risk: 'A strong demo can hide the hard work SaaS vendors do: auth, database, hosting, uptime, permissions, observability, billing, updates, and recovery.',
+      validation: 'Track artifact-to-code handoff, deployed prototype rate, repeat operation after week two, rollback use, support contacts, and who the customer thinks owns the tool when it fails.'
+    },
+    {
+      tag: 'Hypothesis gate',
+      title: 'Make partner strategy part of the product decision, not a procurement afterthought.',
+      mechanism: 'For many workflows, Anthropic should not need to own every runtime layer on day one. A Supabase-style partner could carry auth, Postgres, storage, and functions; a Vercel-style partner could carry deploy, hosting, and observability; a Replit-style partner could carry hosted development and runtime.',
+      risk: 'Partnering can accelerate learning, but it can also blur the product promise. If the customer pays Anthropic, Anthropic still needs a clear answer for ownership, support, billing, and failure recovery.',
+      validation: 'Run partner-hosted pilots with explicit ownership maps: what Anthropic owns, what the partner owns, what the customer controls, and which layer creates support or trust friction.'
+    },
+    {
+      tag: 'Hypothesis gate',
+      title: 'Treat trust as the operating package customers buy, not a policy layer around the product.',
+      mechanism: 'A build-and-run subscription needs visible controls for data access, permissions, logs, rollback, human approval, cost boundaries, and support paths. These are not secondary settings if the tool replaces rented software.',
+      risk: 'Too much control surface can make the product feel like infrastructure instead of a consumer tool. The right move is contextual disclosure: show the boundary when the customer is about to rely on the tool.',
+      validation: 'Test trust comprehension for auth, data scope, tool permissions, approval flows, rollback, uptime expectations, and support ownership before expanding external or customer-facing use.'
+    },
+    {
+      tag: 'Hypothesis gate',
+      title: 'Only test commercial packaging after spend movement is visible.',
+      mechanism: 'The commercial model could be builder add-on, hosted app bundle, usage-based agent runtime, partner revenue share, or enterprise governance package. I would not defend a final package until Anthropic can see which spend actually moves: SaaS seats, agency work, internal engineering time, or manual operations.',
+      risk: 'Pricing too early can force the wrong abstraction. A customer may pay for building, hosting, agent operations, governance, or support, and those are different products with different cost curves.',
+      validation: 'Measure willingness to pay, SaaS-seat reduction intent, paid pilot conversion, runtime cost, support burden, and upgrade behavior by workflow and customer scale.'
+    }
+  ];
+  const columns = [
+    {
+      title: 'What I’d hold constant',
+      items: [
+        'Anthropic’s ad-free trust posture and user-interest framing.',
+        'Claude’s positioning as a serious build surface, not an engagement-maximized feed.',
+        'Model quality, safety, and research-to-product translation as the center of the product advantage.',
+        'Existing plan architecture until internal data shows which workflows drive repeat use, spend movement, and support load.'
+      ]
+    },
+    {
+      title: 'What I’d structurally change',
+      items: [
+        'Move 0-to-1 bets through a shared screen: workflow wedge, generated tool, runtime layer, governance boundary, spend capture.',
+        'Attach an own / bundle / partner / customer-managed decision to every runtime layer before packaging a build-and-run promise.',
+        'Make hosting, auth, permissions, rollback, observability, and support ownership visible in the product where the customer starts to rely on the tool.',
+        'Pair product bets with a partner strategy instead of treating backend and hosting as implementation details.'
+      ]
+    },
+    {
+      title: 'What I’d test before shipping',
+      items: [
+        'Fake-door demand for a build-and-run subscription by workflow and customer scale.',
+        'Partner-hosted app pilots using Supabase/Vercel-style runtime layers before first-party infrastructure commitments.',
+        'Trust comprehension for data access, auth, permissions, logs, rollback, uptime expectations, and support ownership.',
+        'Spend migration evidence: whether customers would reduce SaaS seats, agency work, internal engineering effort, or manual operations and pay for a Claude-centered bundle.'
+      ]
+    }
+  ];
+  return <section className="px-6 md:px-12 lg:px-20 py-24 border-t border-anthro-border">
+    <div className="max-w-6xl mx-auto">
+      <SectionHeader num="10" label="Framework I’d Validate" title="I would validate build-and-run bets through five gates: workflow wedge, runtime ownership, partner strategy, trust package, and commercial model." lead="This is an illustrative operating framework, not a proposed reorg, final package, or pricing architecture. The goal is to make the build-and-run question explicit before Anthropic invests in navigation, runtime partnerships, subscription packaging, or a polished customer-facing surface."/>
+      <div className="border border-anthro-warning bg-anthro-warning/10 p-5 mb-10">
+        <p className="font-mono text-xs text-anthro-warning leading-relaxed">Specific cycle lengths, thresholds, commercial models, partner splits, and ownership boundaries in this section are illustrative. They would require fake-door tests, partner-hosted pilots, cohort analysis, willingness-to-pay research, and internal telemetry before being defended as final.</p>
+      </div>
+      <div className="grid md:grid-cols-2 gap-px bg-anthro-border border border-anthro-border mb-12">
+        {gates.map((gate, i) => <Card key={gate.title}>
+          <div className="flex items-baseline gap-3 mb-4"><span className="font-display text-4xl text-anthro-accent/70 num-display">{i + 1}</span><Eyebrow className="text-anthro-accent">{gate.tag}</Eyebrow></div>
+          <h3 className="font-display text-xl text-anthro-primary leading-tight mb-4">{gate.title}</h3>
+          <p className="text-sm text-anthro-body leading-relaxed mb-4">{gate.mechanism}</p>
+          <div className="grid gap-3 text-sm">
+            <div className="border border-anthro-border bg-anthro-background p-4"><Eyebrow className="mb-2 text-anthro-warning">Why this might break</Eyebrow><p className="text-anthro-body leading-relaxed">{gate.risk}</p></div>
+            <div className="border border-anthro-border bg-anthro-background p-4"><Eyebrow className="mb-2 text-anthro-accent">What would resolve it</Eyebrow><p className="text-anthro-body leading-relaxed">{gate.validation}</p></div>
+          </div>
+        </Card>)}
+      </div>
+      <div className="grid md:grid-cols-3 gap-px bg-anthro-border border border-anthro-border">
+        {columns.map(col => <Card key={col.title}>
+          <Eyebrow className="mb-4 text-anthro-accent">{col.title}</Eyebrow>
+          <ul className="space-y-3 text-sm text-anthro-body leading-relaxed">{col.items.map(x => <li key={x} className="flex gap-2"><span className="text-anthro-accent flex-shrink-0">·</span><span>{x}</span></li>)}</ul>
+        </Card>)}
+      </div>
+      <PullQuote>High confidence that Anthropic should test the build-and-run promise workflow by workflow. Lower confidence that the runtime layer should be first-party, partnered, or customer-managed until pilots show which ownership model customers trust and what spend actually moves.</PullQuote>
+    </div>
+  </section>;
+};
+
+const ValidationPlanSection = () => {
+  const phases = [
+    {
+      era: 'Days 1–30',
+      title: 'Map the wedge, the runtime boundary, and the spend pool',
+      goal: 'Build the operating picture before proposing a build-and-run subscription surface.',
+      items: [
+        'Audit where Claude users already move from prompt to artifact, artifact to code, and code to a repeated workflow.',
+        'Instrument the build-to-run handoff: failed builds, deployment stalls, connector permission drop-off, rollback attempts, and support contacts.',
+        'Map the current SaaS spend pool by workflow type: internal ops, customer intake, reporting, portals, agentic operations, and vertical workflows.',
+        'Identify which runtime layer is load-bearing for each workflow: auth, database, storage, hosting, observability, admin controls, support, or billing.'
+      ],
+      output: 'A ranked wedge map showing which workflows have repeated pain, reachable spend, low switching friction, and a clear runtime owner.'
+    },
+    {
+      era: 'Days 31–60',
+      title: 'Test the runtime model before testing a subscription model',
+      goal: 'Learn whether customers trust Claude-built tools when the product has to run, not only generate.',
+      items: [
+        'Run workflow interviews with midsize teams and small businesses that currently stretch Airtable, Monday, Zapier, HubSpot, or internal tools beyond their intended shape.',
+        'Launch fake-door tests for a Claude build-and-run path: describe workflow, generate tool, choose runtime, set permissions, and preview expected cost.',
+        'Prototype one partner-hosted app with a Supabase/Vercel-style runtime so the team can observe handoff friction before building first-party infrastructure.',
+        'Define kill or reshape criteria around repeat use, customer trust, deployment completion, support burden, and evidence that spend could move from rented seats.'
+      ],
+      output: 'A small set of build-and-run candidates with observed demand, runtime friction, partner dependency, trust requirements, and spend-migration evidence.'
+    },
+    {
+      era: 'Days 61–90',
+      title: 'Convert validated learning into a narrow platform bet',
+      goal: 'Turn the best evidence into a roadmap proposal without overcommitting to a platform architecture too early.',
+      items: [
+        'Compare cohorts by workflow, customer scale, deployment path, runtime owner, repeat operation, upgrade intent, and support contact rate.',
+        'Pressure-test the commercial model with product, infrastructure, finance, legal, safety, and partner teams: Pro/Max add-on, hosted bundle, usage runtime, or enterprise governance package.',
+        'Prepare a 2-quarter build-and-run plan that separates ship, partner-pilot, dogfood, hold, and kill or reshape decisions.',
+        'Set a weekly review rhythm for build success, runtime reliability, governance events, support load, marginal cost, and spend-migration signals.'
+      ],
+      output: 'A focused platform proposal with the first wedge, the runtime ownership model, partner assumptions, trust package, and evidence needed before scale.'
+    }
+  ];
+
+  const notDo = [
+    'I would not announce a build-and-run subscription before proving which workflow customers will trust Claude to operate.',
+    'I would not treat a generated app as a replacement for SaaS. The runtime, support, permissions, billing, and rollback model have to be true underneath.',
+    'I would not build first-party runtime infrastructure before testing whether a Supabase/Vercel-style partner path can carry the early wedge.',
+    'I would not optimize for broad platform breadth in the first 90 days. I would pick one workflow where spend, switching friction, and runtime boundary are visible.'
+  ];
+
+  return <section className="px-6 md:px-12 lg:px-20 py-24 border-t border-anthro-border">
+    <div className="max-w-6xl mx-auto">
+      <SectionHeader
+        num="11"
+        label="First 90 Days"
+        title="The first 90 days should prove the runtime boundary before scaling the build-and-run promise."
+        lead="I would not start by naming a platform roadmap from the outside. I would start by finding the workflow wedge, the runtime owner, the trust package, and the spend signal that would justify a Claude-centered build-and-run subscription."
+      />
+
+      <div className="grid md:grid-cols-3 gap-px bg-anthro-border border border-anthro-border mb-10">
+        {phases.map((phase) => <Card key={phase.era}>
+          <Eyebrow className="mb-4 text-anthro-accent">{phase.era}</Eyebrow>
+          <h3 className="font-display text-xl text-anthro-primary mb-3">{phase.title}</h3>
+          <p className="text-sm text-anthro-muted leading-relaxed mb-5">{phase.goal}</p>
+          <ul className="space-y-3 text-sm text-anthro-body mb-6">
+            {phase.items.map((item) => <li key={item} className="flex gap-2 leading-relaxed">
+              <Check size={14} className="mt-1 text-anthro-accent flex-shrink-0"/>
+              <span>{item}</span>
+            </li>)}
+          </ul>
+          <div className="pt-4 border-t border-anthro-border">
+            <Eyebrow className="mb-2">Output</Eyebrow>
+            <p className="text-sm text-anthro-body leading-relaxed">{phase.output}</p>
+          </div>
+        </Card>)}
+      </div>
+
+      <Card>
+        <Eyebrow className="mb-5 text-anthro-warning">What I would not do</Eyebrow>
+        <div className="grid md:grid-cols-2 gap-4 text-sm text-anthro-body">
+          {notDo.map((item) => <div key={item} className="flex gap-3 leading-relaxed">
+            <X size={14} className="mt-1 text-anthro-warning flex-shrink-0"/>
+            <span>{item}</span>
+          </div>)}
+        </div>
+      </Card>
+    </div>
+  </section>;
+};
+
+const OpenQuestionsSection = () => { const groups=[['About the data I cannot see externally',['Which workflows have the strongest repeat behavior after the first successful tool build?','Where do users abandon between prototype, code handoff, deployment, and repeated use?','Which plan upgrades are driven by usage volume versus tool-building workflows?','Which support contacts are really product signals around build, deploy, cost, memory, and permissions?']],['About product strategy',['Which SaaS-like workflows does Anthropic want Claude to be credible for over the next year?','Where should Claude act as a destination builder versus an embedded workflow layer?','How much should the consumer product explain model choice, usage, memory, deployment, and tools?','Which research capabilities are close enough to consumer reliability to test externally?']],['About operating model',['How are research capability signals translated into consumer product bets today?','What is the decision cadence for 0-to-1 consumer bets?','Where do safety, policy, product, and infrastructure teams disagree most often on consumer scope?','What telemetry is trusted enough to make roadmap decisions around repeat behavior, trust, cost, support, and upgrade intent?']]]; return <section className="px-6 md:px-12 lg:px-20 py-24 border-t border-anthro-border"><div className="max-w-6xl mx-auto"><SectionHeader num="12" label="Open Questions" title="These are the questions I would need Anthropic’s internal data to answer." lead="The outside evidence is enough to form hypotheses, not enough to defend a roadmap. These questions would change my read on segmentation, product sequencing, trust design, and the operating model."/><div className="grid md:grid-cols-3 gap-px bg-anthro-border border border-anthro-border">{groups.map(([g,qs])=><Card key={g}><Eyebrow className="mb-5 text-anthro-accent">{g}</Eyebrow><ol className="space-y-4 text-sm text-anthro-body list-decimal list-inside">{qs.map(q=><li key={q}>{q}</li>)}</ol></Card>)}</div><PullQuote>These open questions are part of the work, not a substitute for a point of view. I have high confidence that Claude is entering a build-and-legibility phase. I have lower confidence on sequencing until internal behavior, cost, and trust data are visible.</PullQuote></div></section> };
+
+const KelvinBridge = () => <section className="px-6 md:px-12 lg:px-20 py-24 border-t border-anthro-border"><div className="max-w-6xl mx-auto"><SectionHeader num="13" label="Why This Profile" title="Three prior transitions map to the role’s core work: turning complex capability into trusted, repeatable consumer behavior." lead="I am not positioning myself as the deepest model-research PM or former AI consumer founder Anthropic will meet. The relevant pattern in my background is building novel consumer products and operating systems where complex value had to become understandable, repeatable, and commercially useful."/><div className="grid md:grid-cols-3 gap-px bg-anthro-border border border-anthro-border mb-12">{CAREER_ARCS.map(card=><Card key={card.company+card.era}><Eyebrow className="mb-4">{card.era}</Eyebrow><div className="font-display text-2xl text-anthro-primary mb-1">{card.company}</div><div className="font-mono text-xs text-anthro-muted mb-5">{card.role}</div><p className="italic text-anthro-accent text-sm mb-5">{card.relevance}</p><ul className="space-y-2 text-sm text-anthro-body mb-6">{card.wins.map(w=><li key={w}>· {w}</li>)}</ul><div className="pt-5 border-t border-anthro-border text-sm text-anthro-muted italic">{card.tieIn}</div></Card>)}</div><div className="grid md:grid-cols-2 gap-10"><div><Eyebrow className="mb-4">Oct 2023 – Present</Eyebrow><h3 className="font-display text-2xl text-anthro-primary mb-4">Independent study and career break</h3><p className="text-anthro-body mb-4">I stepped away from full-time work to support family through significant health challenges. That caregiving period has stabilized, and I am returning to full-time product leadership with a clearer view of the work I want to do next: products where new technology has to become useful, trusted, and understandable for real people.</p><p className="text-anthro-body">In parallel, I built hands-on fluency with Claude Code, Codex, ChatGPT, Gemini, and modern LLM workflows. The useful part was not becoming a full-time engineer. It was learning where these tools feel ready, where they break, and how much product judgment still matters when the model can generate the first draft.</p></div><div><Eyebrow className="mb-4">What I would not claim</Eyebrow><p className="text-anthro-body mb-4">I am not the deepest frontier-model PM, research PM, or former AI consumer founder Anthropic will interview. I would not claim that telecom, Prime, or billing systems map literally to AI inference, model behavior, or safety review.</p><p className="text-anthro-body">What I have lived is the adjacent consumer-scale problem: novel products become durable only when customers understand the value, trust the rules, and repeat the behavior often enough for the economics to work. The bet is whether that experience, paired with hands-on AI tooling fluency, helps Anthropic translate research capability into shipped consumer products without losing trust, legibility, or operating discipline.</p></div></div></div></section>;
+
+const Footer = () => <footer className="px-6 md:px-12 lg:px-20 py-16 border-t border-anthro-border"><div className="max-w-6xl mx-auto"><div className="hairline mb-10"/><div className="grid md:grid-cols-3 gap-8"><div><Eyebrow className="mb-3">Prepared by</Eyebrow><div className="font-display text-2xl text-anthro-primary mb-1">Kelvin Zee</div><div className="font-mono text-xs text-anthro-muted mb-3">Senior product leader · Seattle</div><div className="font-mono text-xs text-anthro-muted">Kelvinz@gmail.com · linkedin.com/in/kelvinz</div></div><div><Eyebrow className="mb-3">Prepared for</Eyebrow><div className="font-body text-anthro-body">Anthropic</div><div className="font-mono text-xs text-anthro-muted mt-2">Product Manager, Consumer · May 2026</div></div><div><Eyebrow className="mb-3">Sources & method</Eyebrow><div className="font-body text-xs text-anthro-muted leading-relaxed">Public sources reviewed May 2, 2026: Anthropic company/news/pricing pages, Claude Code and Claude Design pages, Anthropic Economic Index, Stanford AI Index, Pew Research, competitor pricing/product pages, and Kelvin Zee résumé. Public facts should be rechecked before final submission.</div></div></div><div className="font-mono text-[10px] text-anthro-muted tracking-widest pt-8 mt-10 border-t border-anthro-border flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"><span>§ END OF BRIEF</span><span>v 1.1 — May 2, 2026</span></div></div></footer>;
+
+const StrategyBrief = () => <div className="min-h-screen bg-anthro-background text-anthro-primary font-body"><Hero/><SetupSection/><AnalogySection/><TodaySurfaceSection/><FieldSection/><UserShiftSection/><SegmentsSection/><HypothesesSection/><ProductBetBuilder/><FrameworkSection/><ValidationPlanSection/><OpenQuestionsSection/><KelvinBridge/><Footer/></div>;
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<StrategyBrief />);
+</script>
+</body>
+</html>
